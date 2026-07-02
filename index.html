@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#15110C" />
+    <title>El Shaddai Worship Center | Nagercoil</title>
+    <meta name="description" content="El Shaddai Worship Center, Nagercoil — a family of faith rooted in apostolic truth and Holy Ghost power." />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL — replace with the real deployed domain once live. -->
+    <link rel="canonical" href="https://www.elshaddaiworshipcenter.org/" />
+
+    <!-- Open Graph / social sharing preview. Because this site is a
+         client-rendered SPA (no server-side rendering), link-preview bots
+         like WhatsApp's and Facebook's — which do NOT execute JavaScript —
+         will always read these SAME tags no matter which page is shared.
+         See "Social sharing previews" in README.md for what this means and
+         how to get true per-page previews later if it's worth the effort. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="El Shaddai Worship Center" />
+    <meta property="og:title" content="El Shaddai Worship Center | Nagercoil" />
+    <meta property="og:description" content="A family of faith rooted in apostolic truth and Holy Ghost power. Join us for worship in Nagercoil, Tamil Nadu." />
+    <meta property="og:image" content="https://www.elshaddaiworshipcenter.org/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://www.elshaddaiworshipcenter.org/" />
+    <meta property="og:locale" content="en_IN" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="El Shaddai Worship Center | Nagercoil" />
+    <meta name="twitter:description" content="A family of faith rooted in apostolic truth and Holy Ghost power. Join us for worship in Nagercoil, Tamil Nadu." />
+    <meta name="twitter:image" content="https://www.elshaddaiworshipcenter.org/og-image.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics (GA4) — replace G-XXXXXXXXXX with the real
+         Measurement ID from analytics.google.com to activate. Left inert
+         (no network request) until a real ID is set, so it won't clutter
+         the console or send blank data during development. See "Analytics"
+         in README.md. -->
+    <script>
+      window.GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'
+      if (window.GA_MEASUREMENT_ID && window.GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+        var gaScript = document.createElement('script')
+        gaScript.async = true
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.GA_MEASUREMENT_ID
+        document.head.appendChild(gaScript)
+        window.dataLayer = window.dataLayer || []
+        function gtag() { window.dataLayer.push(arguments) }
+        gtag('js', new Date())
+        gtag('config', window.GA_MEASUREMENT_ID)
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Netlify Identity — required for the Content Admin (/admin) login.
+         Invite/confirmation emails link to this root domain with a token
+         in the URL, not directly to /admin, so this redirect completes
+         that flow. Harmless no-op if the site isn't hosted on Netlify or
+         Identity isn't enabled — see README.md's "Content Admin" section. -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user) => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/'
+            })
+          }
+        })
+      }
+    </script>
+  </body>
+</html>

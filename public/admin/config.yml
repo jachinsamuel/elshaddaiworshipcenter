@@ -1,0 +1,202 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# This assumes the site is hosted on Netlify, which provides Identity +
+# Git Gateway for free — meaning logins and git commits are handled by
+# Netlify with zero custom backend code. If hosting elsewhere (Vercel,
+# etc.), swap this for the "github" backend + a small OAuth proxy.
+# See README.md's "Content Admin (Decap CMS)" section for both paths.
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  # ---------------------------------------------------------------------
+  - name: "site_settings"
+    label: "Site Settings"
+    files:
+      - name: "settings"
+        label: "General Settings"
+        file: "src/content/settings.json"
+        fields:
+          - { label: "Logo", name: "logo", widget: "image" }
+          - { label: "Hero Video (homepage background)", name: "hero_video", widget: "file", hint: "MP4 file, plays muted and looped behind the homepage title." }
+          - { label: "YouTube Channel ID", name: "youtube_channel_id", widget: "string", hint: "Starts with UC... Find it under YouTube Studio > Settings > Channel > Advanced settings. Used to auto-embed the live stream during service hours." }
+          - { label: "YouTube Channel URL (Watch Live button)", name: "youtube_watch_url", widget: "string" }
+          - { label: "Facebook URL", name: "facebook_url", widget: "string" }
+          - { label: "Instagram URL", name: "instagram_url", widget: "string" }
+          - { label: "YouTube URL", name: "youtube_url", widget: "string" }
+
+  # ---------------------------------------------------------------------
+  - name: "contact_info"
+    label: "Contact Info"
+    files:
+      - name: "contact"
+        label: "Contact Details"
+        file: "src/content/contact.json"
+        fields:
+          - { label: "Phone Number", name: "phone", widget: "string" }
+          - { label: "Email Address", name: "email", widget: "string" }
+          - { label: "Postal Address", name: "address", widget: "text" }
+          - { label: "WhatsApp Group Invite Link", name: "whatsapp_group_link", widget: "string", hint: "From WhatsApp app: group > Invite via link" }
+          - { label: "WhatsApp Number", name: "whatsapp_number", widget: "string", hint: "Country code + number, no +, spaces, or dashes. Example: 919876543210" }
+          - { label: "Google Maps Embed URL", name: "map_embed_url", widget: "string", hint: "From Google Maps: Share > Embed a map > copy the src= URL" }
+
+  # ---------------------------------------------------------------------
+  - name: "give"
+    label: "Give (Tithes & Offerings)"
+    files:
+      - name: "give"
+        label: "Giving Details"
+        file: "src/content/give.json"
+        fields:
+          - { label: "UPI ID", name: "upi_id", widget: "string" }
+          - { label: "Bank Account Name", name: "account_name", widget: "string" }
+          - { label: "Bank Name & Branch", name: "bank_name", widget: "string" }
+          - { label: "Account Number", name: "account_number", widget: "string" }
+          - { label: "IFSC Code", name: "ifsc_code", widget: "string" }
+
+  # ---------------------------------------------------------------------
+  - name: "leaders"
+    label: "Leadership"
+    files:
+      - name: "leaders"
+        label: "Founder & Head Pastor"
+        file: "src/content/leaders.json"
+        fields:
+          - label: "Founder & Apostle"
+            name: "founder"
+            widget: "object"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Role Title", name: "role", widget: "string" }
+              - { label: "Main Portrait", name: "image", widget: "image" }
+              - { label: "Secondary/Archival Photo", name: "secondary_image", widget: "image" }
+              - { label: "Bio — Founding Story", name: "bio_intro", widget: "text" }
+              - { label: "Bio — Legacy", name: "bio_legacy", widget: "text" }
+              - { label: "Pull-Quote", name: "quote", widget: "string" }
+              - { label: "Homepage Short Blurb", name: "home_blurb", widget: "text" }
+          - label: "Head Pastor"
+            name: "head_pastor"
+            widget: "object"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Role Title", name: "role", widget: "string" }
+              - { label: "Main Portrait", name: "image", widget: "image" }
+              - { label: "Secondary/Family Photo", name: "secondary_image", widget: "image" }
+              - { label: "Bio — Introduction", name: "bio_intro", widget: "text" }
+              - { label: "Bio — Family", name: "bio_family", widget: "text" }
+              - { label: "Instagram URL", name: "instagram_url", widget: "string" }
+              - { label: "Facebook URL", name: "facebook_url", widget: "string" }
+              - { label: "Homepage Short Blurb", name: "home_blurb", widget: "text" }
+
+  # ---------------------------------------------------------------------
+  - name: "about_content"
+    label: "About Page Content"
+    files:
+      - name: "about"
+        label: "About Page Text"
+        file: "src/content/about-content.json"
+        fields:
+          - { label: "Huge Opening Statement", name: "opening_statement", widget: "text", hint: "The big sentence at the top of the About page." }
+          - { label: "Homepage 'Who We Are' Intro", name: "home_intro", widget: "text" }
+          - { label: "Homepage Founding Summary (one line)", name: "founding_summary", widget: "string" }
+          - { label: "Sanctuary Photo", name: "sanctuary_image", widget: "image" }
+          - { label: "Founded Year Text", name: "founded_year_text", widget: "string" }
+          - { label: "Location Text", name: "location_text", widget: "string" }
+          - { label: "Founding Story — Paragraph 1", name: "story_paragraph_1", widget: "text" }
+          - { label: "Founding Story — Paragraph 2", name: "story_paragraph_2", widget: "text" }
+
+  # ---------------------------------------------------------------------
+  - name: "page_headers"
+    label: "Page Header Photos"
+    files:
+      - name: "headers"
+        label: "Subpage Header Backgrounds"
+        file: "src/content/page-headers.json"
+        fields:
+          - { label: "About Page Header", name: "about", widget: "image" }
+          - { label: "Services Page Header", name: "services", widget: "image" }
+          - { label: "Ministries Page Header", name: "ministries", widget: "image" }
+          - { label: "Sermons Page Header", name: "sermons", widget: "image" }
+          - { label: "Contact Page Header", name: "contact", widget: "image" }
+          - { label: "Give Page Header", name: "give", widget: "image" }
+
+  # ---------------------------------------------------------------------
+  - name: "glimpses"
+    label: "Homepage Glimpses"
+    files:
+      - name: "glimpses"
+        label: "Glimpses of Worship Photos"
+        file: "src/content/glimpses.json"
+        fields:
+          - label: "Photos"
+            name: "glimpses"
+            widget: "list"
+            hint: "Exactly 3 photos, in order. The middle one displays larger."
+            fields:
+              - { label: "Photo", name: "image", widget: "image" }
+
+  # ---------------------------------------------------------------------
+  - name: "services"
+    label: "Weekly Service Schedule"
+    files:
+      - name: "services"
+        label: "Services"
+        file: "src/content/services.json"
+        fields:
+          - label: "Services"
+            name: "services"
+            widget: "list"
+            fields:
+              - { label: "Internal ID (don't change)", name: "id", widget: "string" }
+              - label: "Day"
+                name: "day"
+                widget: "select"
+                options: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+              - { label: "Service Title", name: "title", widget: "string" }
+              - { label: "Start Time", name: "start_time", widget: "string", hint: "24-hour format HH:MM, e.g. 06:00 or 19:00" }
+              - { label: "End Time", name: "end_time", widget: "string", hint: "24-hour format HH:MM, e.g. 08:30 or 20:30" }
+              - { label: "Note (optional)", name: "note", widget: "string", required: false }
+              - { label: "Photo", name: "image", widget: "image" }
+              - label: "Accent Color"
+                name: "accent"
+                widget: "select"
+                options: ["royal", "red", "gold"]
+
+  # ---------------------------------------------------------------------
+  - name: "ministries"
+    label: "Ministries"
+    files:
+      - name: "ministries"
+        label: "Ministries"
+        file: "src/content/ministries.json"
+        fields:
+          - label: "Ministries"
+            name: "ministries"
+            widget: "list"
+            hint: "The 3 ministry cards on the Ministries page."
+            fields:
+              - label: "Ministry"
+                name: "id"
+                widget: "select"
+                options: ["youth", "sunday-school", "women"]
+                hint: "Controls which icon shows — don't add new options without updating the code."
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Photo", name: "image", widget: "image" }
+
+  # ---------------------------------------------------------------------
+  - name: "sermons"
+    label: "Sermons"
+    folder: "src/content/sermons"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Scripture Reference", name: "scripture", widget: "string", hint: "e.g. Luke 1:30" }
+      - { label: "Speaker", name: "speaker", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Thumbnail", name: "thumb", widget: "image" }
+      - { label: "YouTube Link", name: "url", widget: "string" }

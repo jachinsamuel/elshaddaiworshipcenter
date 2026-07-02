@@ -1,0 +1,44 @@
+{
+  "services": [
+    {
+      "id": "sunday-first",
+      "day": "Sunday",
+      "title": "1st Service",
+      "start_time": "06:00",
+      "end_time": "08:30",
+      "note": "",
+      "image": "/services/sunday-first.jpg",
+      "accent": "royal"
+    },
+    {
+      "id": "sunday-second",
+      "day": "Sunday",
+      "title": "2nd Service",
+      "start_time": "10:00",
+      "end_time": "12:30",
+      "note": "Main Family Worship",
+      "image": "/services/sunday-second.jpg",
+      "accent": "red"
+    },
+    {
+      "id": "friday-fasting",
+      "day": "Friday",
+      "title": "Fasting Prayer",
+      "start_time": "10:00",
+      "end_time": "13:00",
+      "note": "Intercessory Prayer, Healing",
+      "image": "/services/fasting-prayer.jpg",
+      "accent": "gold"
+    },
+    {
+      "id": "saturday-worship",
+      "day": "Saturday",
+      "title": "Night Worship",
+      "start_time": "19:00",
+      "end_time": "20:30",
+      "note": "Revival & Bible Study",
+      "image": "/services/saturday-worship.jpg",
+      "accent": "royal"
+    }
+  ]
+}

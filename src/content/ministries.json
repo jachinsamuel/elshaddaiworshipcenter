@@ -1,0 +1,22 @@
+{
+  "ministries": [
+    {
+      "id": "youth",
+      "title": "Youth Fellowship",
+      "description": "A vibrant community for teens and young adults to grow in faith, friendship, and purpose.",
+      "image": "/ministries/youth.jpg"
+    },
+    {
+      "id": "sunday-school",
+      "title": "Sunday School",
+      "description": "Building strong foundations in scripture for children, taught through stories, song, and play.",
+      "image": "/ministries/sunday-school.jpg"
+    },
+    {
+      "id": "women",
+      "title": "Women's Ministry",
+      "description": "A circle of prayer, mentorship, and fellowship for women at every season of life.",
+      "image": "/ministries/women.jpg"
+    }
+  ]
+}
