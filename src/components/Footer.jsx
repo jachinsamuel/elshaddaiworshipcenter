@@ -42,13 +42,13 @@ export default function Footer() {
         className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-1 md:grid-cols-4 gap-10"
       >
         {/* Column 1 */}
-        <motion.div custom={0} variants={fadeUp} className="flex flex-col gap-4">
+        <motion.div custom={0} variants={fadeUp} className="flex flex-col items-center gap-4">
           <img
-            src={settingsData.logo}
+            src={settingsData.footer_logo}
             alt="El Shaddai Worship Center"
-            className="h-20 w-20 object-contain"
+            className="w-40 max-w-full h-auto object-contain"
           />
-          <div className="flex gap-3">
+          <div className="flex justify-center gap-3">
             <a href={settingsData.facebook_url} aria-label="Facebook" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
               <Facebook size={16} />
             </a>
