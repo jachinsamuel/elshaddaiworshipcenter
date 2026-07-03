@@ -53,6 +53,7 @@ collections:
         file: "src/content/give.json"
         fields:
           - { label: "UPI ID", name: "upi_id", widget: "string" }
+          - { label: "UPI QR Code Image", name: "qr_image", widget: "image", required: false, hint: "Upload a screenshot of the UPI QR code. Shows on the Give page alongside the UPI ID." }
           - { label: "Bank Account Name", name: "account_name", widget: "string" }
           - { label: "Bank Name & Branch", name: "bank_name", widget: "string" }
           - { label: "Account Number", name: "account_number", widget: "string" }
@@ -133,7 +134,7 @@ collections:
           - label: "Photos"
             name: "glimpses"
             widget: "list"
-            hint: "Exactly 3 photos, in order. The middle one displays larger."
+            hint: "Add photos for the scrolling worship gallery on the homepage. More photos create a richer experience."
             fields:
               - { label: "Photo", name: "image", widget: "image" }
 
@@ -199,3 +200,22 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Thumbnail", name: "thumb", widget: "image" }
       - { label: "YouTube Link", name: "url", widget: "string" }
+
+  # ---------------------------------------------------------------------
+  - name: "events"
+    label: "Upcoming Events"
+    files:
+      - name: "events"
+        label: "Events"
+        file: "src/content/events.json"
+        fields:
+          - label: "Events"
+            name: "events"
+            widget: "list"
+            hint: "Add upcoming events. They appear on the homepage automatically. Remove past events to keep the list current."
+            fields:
+              - { label: "Event Title", name: "title", widget: "string" }
+              - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+              - { label: "Time (optional)", name: "time", widget: "string", required: false, hint: "e.g. 10:00 AM or 6:00 PM \u2013 9:00 PM" }
+              - { label: "Description (optional)", name: "description", widget: "text", required: false }
+              - { label: "Photo (optional)", name: "image", widget: "image", required: false }

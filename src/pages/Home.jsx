@@ -4,19 +4,30 @@ import { useEffect, useState } from 'react'
 import { PlayCircle, ArrowRight, Clock, Radio } from 'lucide-react'
 import RidgeDivider from '../components/RidgeDivider'
 import Seo from '../components/Seo'
-import { getLiveService } from '../lib/schedule'
+import FallbackImage from '../components/FallbackImage'
+import { getLiveService, SCHEDULE } from '../lib/schedule'
 import settingsData from '../content/settings.json'
 import leadersData from '../content/leaders.json'
 import aboutContent from '../content/about-content.json'
 import glimpsesData from '../content/glimpses.json'
+import eventsData from '../content/events.json'
 
 const YOUTUBE_CHANNEL_ID = settingsData.youtube_channel_id
 
-const SCHEDULE_PREVIEW = [
-  { day: 'Sunday', time: '6:00 AM & 10:00 AM', label: 'Family Worship' },
-  { day: 'Friday', time: '10:00 AM', label: 'Fasting Prayer' },
-  { day: 'Saturday', time: '7:00 PM', label: 'Night Worship' },
-]
+const SCHEDULE_PREVIEW = (() => {
+  const grouped = {}
+  for (const s of SCHEDULE) {
+    if (!grouped[s.dayLabel]) {
+      grouped[s.dayLabel] = { day: s.dayLabel, times: [], label: s.title }
+    }
+    grouped[s.dayLabel].times.push(s.timeLabel.split(' \u2013 ')[0])
+  }
+  return Object.values(grouped).map((g) => ({
+    day: g.day,
+    time: g.times.join(' & '),
+    label: g.label,
+  }))
+})()
 
 const ABOUT_STATS = [
   { label: 'Started At', value: aboutContent.founding_summary || 'Founded in 1985 by our Founding Apostle, in a small gathering of believers.' },
@@ -187,9 +198,9 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100"
+            className="relative hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100"
           >
-            <img
+            <FallbackImage
               src={aboutContent.sanctuary_image}
               alt="El Shaddai sanctuary"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -208,9 +219,9 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100"
+            className="relative hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100"
           >
-            <img
+            <FallbackImage
               src={leadersData.head_pastor.image}
               alt={leadersData.head_pastor.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -281,53 +292,79 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Glimpses — a small/large/small photo rhythm rather than a uniform
-          grid, so the page has a moment of visual variation. Links through
-          to Sermons & Media, where the rest of the photo/video content lives. */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
-              LIFE AT EL SHADDAI
-            </p>
-            <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">Glimpses of Worship</h2>
+      {eventsData.events.length > 0 && (
+        <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
+                MARK YOUR CALENDAR
+              </p>
+              <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">Upcoming Events</h2>
+            </div>
           </div>
-          <Link
-            to="/sermons"
-            className="group font-display text-sm font-semibold text-[var(--color-royal)] inline-flex items-center gap-1.5 hover:text-[var(--color-royal-dark)] transition-colors"
-          >
-            More Moments <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {eventsData.events.map((event, i) => (
+              <motion.div
+                key={event.title + event.date}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="hover-lift rounded-2xl border border-stone-100 shadow-sm bg-white overflow-hidden"
+              >
+                {event.image && (
+                  <div className="relative overflow-hidden aspect-video bg-stone-100">
+                    <FallbackImage src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="p-6">
+                  <div className="inline-block bg-[var(--color-royal)]/10 text-[var(--color-royal)] text-xs font-display font-semibold px-3 py-1 rounded-full mb-3">
+                    {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    {event.time ? ` · ${event.time}` : ''}
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-2">{event.title}</h3>
+                  {event.description && <p className="text-sm text-stone-500 leading-relaxed">{event.description}</p>}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Glimpses — a continuous scrolling photo strip that auto-plays and
+          pauses on hover, giving the page a sense of motion and life. */}
+      <section className="py-24 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
+                LIFE AT EL SHADDAI
+              </p>
+              <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">Glimpses of Worship</h2>
+            </div>
+            <Link
+              to="/sermons"
+              className="group font-display text-sm font-semibold text-[var(--color-royal)] inline-flex items-center gap-1.5 hover:text-[var(--color-royal-dark)] transition-colors"
+            >
+              More Moments <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 md:h-[420px]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="hover-lift group rounded-2xl overflow-hidden bg-stone-200 aspect-square md:aspect-auto md:h-full"
-          >
-            <img src={glimpsesData.glimpses[0]?.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="hover-lift group col-span-2 rounded-2xl overflow-hidden bg-stone-200 aspect-square md:aspect-auto md:h-full"
-          >
-            <img src={glimpsesData.glimpses[1]?.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="hover-lift group rounded-2xl overflow-hidden bg-stone-200 aspect-square md:aspect-auto md:h-full"
-          >
-            <img src={glimpsesData.glimpses[2]?.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          </motion.div>
+        <div className="flex gap-5 marquee">
+          {[...glimpsesData.glimpses, ...glimpsesData.glimpses].map((g, i) => (
+            <div
+              key={i}
+              className="relative overflow-hidden shrink-0 w-64 h-44 sm:w-72 sm:h-48 md:w-80 md:h-56 rounded-2xl bg-stone-200"
+            >
+              <FallbackImage
+                src={g.image}
+                alt="Glimpse of worship"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          ))}
         </div>
       </section>
     </motion.div>

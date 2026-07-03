@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Copy, Check, Landmark, QrCode } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
+import FallbackImage from '../components/FallbackImage'
 import Seo from '../components/Seo'
 import giveData from '../content/give.json'
 import pageHeaders from '../content/page-headers.json'
@@ -49,6 +50,18 @@ export default function Give() {
             </div>
             <h3 className="font-display text-xl font-bold text-[var(--color-slate-deep)] mb-2">UPI Transfer</h3>
             <p className="text-sm text-stone-500 mb-6">Scan or copy the UPI ID below using any UPI app.</p>
+
+            {giveData.qr_image && (
+              <div className="mb-5 flex justify-center">
+                <div className="relative overflow-hidden w-48 h-48 rounded-xl border border-stone-100 bg-white p-2">
+                  <FallbackImage
+                    src={giveData.qr_image}
+                    alt="UPI QR Code"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="flex items-center justify-between bg-stone-50 hover:bg-stone-100 rounded-lg px-4 py-3 border border-stone-100 transition-colors">
               <span className="font-mono text-sm text-[var(--color-slate-deep)]">{giveData.upi_id}</span>

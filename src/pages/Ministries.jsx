@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Sprout, BookOpen, HeartHandshake, ArrowRight } from 'lucide-react'
+import { Sprout, BookOpen, HeartHandshake } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import Seo from '../components/Seo'
 import ministriesData from '../content/ministries.json'
@@ -57,12 +57,9 @@ export default function Ministries() {
                 <Icon className={`${color} mb-3 transition-transform duration-300 group-hover:scale-110`} size={26} strokeWidth={1.7} />
                 <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-2">{title}</h3>
                 <p className="text-sm text-stone-500 leading-relaxed mb-4">{description}</p>
-                <a
-                  href="#"
-                  className="link-underline inline-flex items-center gap-1.5 font-display text-sm font-semibold text-[var(--color-royal)] hover:text-[var(--color-royal-dark)] transition-colors w-fit"
-                >
-                  Explore <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-                </a>
+                <span className="inline-flex items-center gap-1.5 font-display text-sm font-semibold text-stone-400 cursor-default w-fit">
+                  Coming Soon
+                </span>
               </div>
             </motion.div>
           ))}

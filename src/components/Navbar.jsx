@@ -82,7 +82,13 @@ export default function Navbar() {
                   key={l.to}
                   to={l.to}
                   onClick={() => setOpen(false)}
-                  className="font-display text-white/90 text-base font-medium"
+                  className={({ isActive }) =>
+                    `font-display text-base font-medium transition-colors ${
+                      isActive
+                        ? 'text-[var(--color-gold)] border-l-2 border-[var(--color-gold)] pl-3'
+                        : 'text-white/90 pl-3'
+                    }`
+                  }
                 >
                   {l.label}
                 </NavLink>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { PlayCircle } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
+import FallbackImage from '../components/FallbackImage'
 import Seo from '../components/Seo'
 import pageHeaders from '../content/page-headers.json'
 
@@ -46,7 +47,7 @@ export default function Sermons() {
               className="hover-lift group rounded-2xl overflow-hidden border border-stone-100 shadow-sm bg-white block"
             >
               <div className="relative aspect-video bg-stone-200 overflow-hidden">
-                <img
+                <FallbackImage
                   src={s.thumb}
                   alt={s.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

@@ -1,13 +1,39 @@
 import { motion } from 'framer-motion'
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { Clock3, Sparkles } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
+import FallbackImage from '../components/FallbackImage'
 import Seo from '../components/Seo'
 import { SCHEDULE, getNextServiceId } from '../lib/schedule'
 import pageHeaders from '../content/page-headers.json'
 
 export default function Services() {
-  const nextId = useMemo(() => getNextServiceId(), [])
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const nextId = getNextServiceId(now)
+
+  function getCountdownText(service) {
+    const nowDay = now.getDay()
+    const nowMinutes = now.getHours() * 60 + now.getMinutes()
+    const dayDelta = (service.day - nowDay + 7) % 7
+    const isOngoing = dayDelta === 0 && nowMinutes >= service.start && nowMinutes <= service.end
+    if (isOngoing) return 'Happening Now'
+    let totalMinutes = dayDelta * 1440 + (service.start - nowMinutes)
+    if (totalMinutes < 0) totalMinutes += 7 * 1440
+    const hours = Math.floor(totalMinutes / 60)
+    const mins = totalMinutes % 60
+    if (hours >= 24) {
+      const days = Math.floor(hours / 24)
+      const remainHours = hours % 24
+      return `starts in ${days}d ${remainHours}h`
+    }
+    return `starts in ${hours}h ${mins}m`
+  }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
@@ -36,7 +62,7 @@ export default function Services() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className="hover-lift group relative rounded-2xl overflow-hidden shadow-sm aspect-[5/4] bg-stone-200"
               >
-                <img
+                <FallbackImage
                   src={s.image}
                   alt={s.title}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -50,7 +76,7 @@ export default function Services() {
 
                 {isNext && (
                   <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 bg-white text-[var(--color-ink)] text-xs font-display font-semibold tracking-wide px-3 py-1.5 rounded-full shadow-md">
-                    <Sparkles size={13} className="text-[var(--color-brand-red)]" /> Next Service
+                    <Sparkles size={13} className="text-[var(--color-brand-red)]" /> {getCountdownText(s)}
                   </span>
                 )}
 

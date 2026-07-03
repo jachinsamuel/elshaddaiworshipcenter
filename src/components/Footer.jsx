@@ -47,15 +47,16 @@ export default function Footer() {
             src={settingsData.footer_logo}
             alt="El Shaddai Worship Center"
             className="w-40 max-w-full h-auto object-contain"
+            loading="lazy"
           />
           <div className="flex justify-center gap-3">
-            <a href={settingsData.facebook_url} aria-label="Facebook" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
+            <a href={settingsData.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
               <Facebook size={16} />
             </a>
-            <a href={settingsData.instagram_url} aria-label="Instagram" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
+            <a href={settingsData.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
               <Instagram size={16} />
             </a>
-            <a href={settingsData.youtube_url} aria-label="YouTube" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
+            <a href={settingsData.youtube_url} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="press w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[var(--color-royal)] hover:-translate-y-0.5 transition-all">
               <Youtube size={16} />
             </a>
           </div>

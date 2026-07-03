@@ -106,3 +106,30 @@
 .press:active {
   transform: scale(0.97);
 }
+
+/* Animated shimmer for image loading placeholders (FallbackImage) */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #e5e0d5 25%, #f0ebe0 50%, #e5e0d5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Horizontal auto-scrolling marquee for the Glimpses photo strip */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee {
+  animation: marquee-scroll 40s linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; }
+}
+

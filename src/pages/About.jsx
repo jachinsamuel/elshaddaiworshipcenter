@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
+import FallbackImage from '../components/FallbackImage'
 import HeadPastorGallery from '../components/HeadPastorGallery'
 import Seo from '../components/Seo'
 import aboutContent from '../content/about-content.json'
@@ -30,8 +31,8 @@ export default function About() {
       {/* About section */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24 grid md:grid-cols-2 gap-14 items-center">
         <div className="relative order-2 md:order-1 mb-8">
-          <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
-            <img src={aboutContent.sanctuary_image} alt="El Shaddai sanctuary" className="w-full h-full object-cover" />
+          <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
+            <FallbackImage src={aboutContent.sanctuary_image} alt="El Shaddai Worship Center sanctuary interior" className="w-full h-full object-cover" />
           </div>
           <div className="absolute -bottom-6 -right-6 bg-[var(--color-slate-deep)] text-white px-6 py-4 rounded-xl shadow-xl max-w-[220px]">
             <p className="font-display text-2xl font-bold leading-none">40+</p>
@@ -116,8 +117,8 @@ export default function About() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="order-1 md:order-2"
             >
-              <div className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
-                <img
+              <div className="hover-lift group relative rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
+                <FallbackImage
                   src={leadersData.founder.image}
                   alt={leadersData.founder.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
