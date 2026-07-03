@@ -5,7 +5,7 @@ import FallbackImage from './FallbackImage'
 // A main portrait with a row of thumbnails underneath. Clicking a
 // thumbnail swaps it into the main display — no overlapping badges,
 // no lightbox/modal, just a simple in-place swap.
-export default function HeadPastorGallery({ leader }) {
+export default function HeadPastorGallery({ leader, className = '', ...props }) {
   const images = [leader.image, leader.secondary_image, leader.secondary_image_2].filter(Boolean)
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -15,7 +15,8 @@ export default function HeadPastorGallery({ leader }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="order-1"
+      className={`order-1 w-full max-w-[440px] md:justify-self-start ${className}`}
+      {...props}
     >
       <div className="hover-lift group relative rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
         <FallbackImage

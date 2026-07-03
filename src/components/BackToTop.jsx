@@ -25,7 +25,7 @@ export default function BackToTop() {
           transition={{ duration: 0.25 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Back to top"
-          className="press fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[var(--color-royal)] text-white shadow-lg flex items-center justify-center hover:bg-[var(--color-royal-dark)] hover:-translate-y-0.5 transition-all"
+          className="press fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[var(--color-slate-deep)] text-[var(--color-gold)] border border-[var(--color-gold)]/30 shadow-lg flex items-center justify-center hover:bg-[var(--color-gold)] hover:text-[var(--color-slate-deep)] hover:-translate-y-0.5 transition-all"
         >
           <ChevronUp size={20} />
         </motion.button>

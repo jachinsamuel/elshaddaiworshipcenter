@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader'
 import FallbackImage from '../components/FallbackImage'
 import HeadPastorGallery from '../components/HeadPastorGallery'
 import Seo from '../components/Seo'
+import TiltCard from '../components/TiltCard'
 import aboutContent from '../content/about-content.json'
 import leadersData from '../content/leaders.json'
 import pageHeaders from '../content/page-headers.json'
@@ -30,17 +31,29 @@ export default function About() {
 
       {/* About section */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24 grid md:grid-cols-2 gap-14 items-center">
-        <div className="relative order-2 md:order-1 mb-8">
-          <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="relative order-2 md:order-1 mb-8 aspect-[4/5] max-h-[480px] w-full max-w-[440px] md:justify-self-start"
+        >
+          <TiltCard className="relative rounded-2xl overflow-hidden shadow-lg w-full h-full bg-stone-100">
             <FallbackImage src={aboutContent.sanctuary_image} alt="El Shaddai Worship Center sanctuary interior" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute -bottom-6 -right-6 bg-[var(--color-slate-deep)] text-white px-6 py-4 rounded-xl shadow-xl max-w-[220px]">
+          </TiltCard>
+          <div className="absolute -bottom-6 -right-6 z-10 bg-[var(--color-slate-deep)] text-white px-6 py-4 rounded-xl shadow-xl max-w-[220px]">
             <p className="font-display text-2xl font-bold leading-none">40+</p>
             <p className="text-xs text-white/70 mt-1 leading-snug">Years of Grace &amp; Ministry</p>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="order-1 md:order-2">
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
+          className="order-1 md:order-2"
+        >
           <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
             OUR STORY
           </p>
@@ -64,30 +77,36 @@ export default function About() {
               <p className="font-serif text-lg text-[var(--color-ink)]">{aboutContent.location_text}</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Leadership — full-width alternating rows (image/text swap sides
           each row) rather than matching cards, so each leader gets real
           space instead of competing for the same compact box. */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
           <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
             SPIRITUAL LEADERSHIP
           </p>
           <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
             The Shepherds of Our House
           </h2>
-        </div>
+        </motion.div>
 
         <div className="flex flex-col gap-20 md:gap-28">
           {/* Founder — text left, image right */}
           <div className="grid md:grid-cols-2 gap-16 md:gap-20 items-center">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
               className="order-2 md:order-1"
             >
               <p className="font-display text-xs font-semibold tracking-widest text-[var(--color-gold)] mb-2">
@@ -115,27 +134,33 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="order-1 md:order-2"
+              className="order-1 md:order-2 w-full max-w-[440px] md:justify-self-end"
             >
-              <div className="hover-lift group relative rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100">
+              <TiltCard className="rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100 group">
                 <FallbackImage
                   src={leadersData.founder.image}
                   alt={leadersData.founder.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500"
                 />
-              </div>
+              </TiltCard>
             </motion.div>
           </div>
 
           {/* Head Pastor — image left, text right */}
           <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
-            <HeadPastorGallery leader={leadersData.head_pastor} />
+            <HeadPastorGallery
+              leader={leadersData.head_pastor}
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+            />
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
               className="order-2"
             >
               <p className="font-display text-xs font-semibold tracking-widest text-[var(--color-royal)] mb-2">

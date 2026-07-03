@@ -22,12 +22,39 @@ export default function PageHeader({ eyebrow, title, image }) {
           </motion.p>
         )}
         <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="font-serif text-4xl md:text-6xl font-medium text-white tracking-tight"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.1,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="visible"
+          className="font-serif text-4xl md:text-6xl font-medium text-white tracking-tight flex flex-wrap justify-center gap-x-3"
         >
-          {title}
+          {title ? title.split(' ').map((word, idx) => (
+            <motion.span
+              key={idx}
+              variants={{
+                hidden: { opacity: 0, y: 12 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 0.45,
+                    ease: 'easeOut',
+                  },
+                },
+              }}
+              className="inline-block"
+            >
+              {word}
+            </motion.span>
+          )) : null}
         </motion.h1>
       </div>
       {/* Mountain-ridge signature edge — repeats on every subpage header */}

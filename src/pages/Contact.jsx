@@ -35,10 +35,10 @@ export default function Contact() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Form */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
             className="bg-white rounded-2xl border border-stone-100 shadow-sm p-8"
           >
             <h2 className="font-serif text-2xl font-medium text-[var(--color-ink)] mb-1">Send a Message</h2>
@@ -87,10 +87,10 @@ export default function Contact() {
 
           {/* Contact card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
             className="bg-[var(--color-slate-deep)] rounded-2xl p-8 text-white flex flex-col justify-center gap-7"
           >
             <div>

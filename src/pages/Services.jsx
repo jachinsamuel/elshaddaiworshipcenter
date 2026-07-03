@@ -4,6 +4,7 @@ import { Clock3, Sparkles } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import FallbackImage from '../components/FallbackImage'
 import Seo from '../components/Seo'
+import TiltCard from '../components/TiltCard'
 import { SCHEDULE, getNextServiceId } from '../lib/schedule'
 import pageHeaders from '../content/page-headers.json'
 
@@ -42,9 +43,6 @@ export default function Services() {
 
       <section className="max-w-6xl mx-auto px-6 lg:px-10 py-24">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
-            WEEKLY SCHEDULE
-          </p>
           <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
             Find Your Time to Gather
           </h2>
@@ -60,37 +58,39 @@ export default function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="hover-lift group relative rounded-2xl overflow-hidden shadow-sm aspect-[5/4] bg-stone-200"
+                className="w-full h-full"
               >
-                <FallbackImage
-                  src={s.image}
-                  alt={s.title}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/20 to-transparent" />
+                <TiltCard className="group relative rounded-2xl overflow-hidden shadow-sm aspect-[5/4] bg-stone-200 cursor-default h-full">
+                  <FallbackImage
+                    src={s.image}
+                    alt={s.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/20 to-transparent" />
 
-                <div
-                  className="absolute top-0 left-0 right-0 h-1"
-                  style={{ backgroundColor: s.accent }}
-                />
+                  <div
+                    className="absolute top-0 left-0 right-0 h-1"
+                    style={{ backgroundColor: s.accent }}
+                  />
 
-                {isNext && (
-                  <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 bg-white text-[var(--color-ink)] text-xs font-display font-semibold tracking-wide px-3 py-1.5 rounded-full shadow-md">
-                    <Sparkles size={13} className="text-[var(--color-brand-red)]" /> {getCountdownText(s)}
-                  </span>
-                )}
+                  {isNext && (
+                    <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 bg-white text-[var(--color-ink)] text-xs font-display font-semibold tracking-wide px-3 py-1.5 rounded-full shadow-md">
+                      <Sparkles size={13} className="text-[var(--color-brand-red)]" /> {getCountdownText(s)}
+                    </span>
+                  )}
 
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <p className="font-display text-xs font-semibold tracking-widest text-white/70 mb-1">
-                    {s.dayLabel.toUpperCase()}
-                  </p>
-                  <h3 className="font-serif text-2xl text-white mb-1.5">{s.title}</h3>
-                  {s.note && <p className="text-sm text-white/75 mb-2">{s.note}</p>}
-                  <div className="flex items-center gap-2 text-white font-display font-medium text-sm">
-                    <Clock3 size={16} className="text-white/70" />
-                    {s.timeLabel}
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <p className="font-display text-xs font-semibold tracking-widest text-white/70 mb-1">
+                      {s.dayLabel.toUpperCase()}
+                    </p>
+                    <h3 className="font-serif text-2xl text-white mb-1.5">{s.title}</h3>
+                    {s.note && <p className="text-sm text-white/75 mb-2">{s.note}</p>}
+                    <div className="flex items-center gap-2 text-white font-display font-medium text-sm">
+                      <Clock3 size={16} className="text-white/70" />
+                      {s.timeLabel}
+                    </div>
                   </div>
-                </div>
+                </TiltCard>
               </motion.div>
             )
           })}
