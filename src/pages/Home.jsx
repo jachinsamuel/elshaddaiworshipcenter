@@ -187,7 +187,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] bg-stone-100"
+            className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100"
           >
             <img
               src={aboutContent.sanctuary_image}
@@ -208,7 +208,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] bg-stone-100"
+            className="hover-lift group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100"
           >
             <img
               src={leadersData.head_pastor.image}

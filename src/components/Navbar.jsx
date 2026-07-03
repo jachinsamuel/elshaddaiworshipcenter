@@ -11,6 +11,7 @@ const LINKS = [
   { to: '/ministries', label: 'Ministries' },
   { to: '/sermons', label: 'Sermons' },
   { to: '/contact', label: 'Contact' },
+  { to: '/give', label: 'Give' },
 ]
 
 export default function Navbar() {
@@ -54,12 +55,6 @@ export default function Navbar() {
               {l.label}
             </NavLink>
           ))}
-          <Link
-            to="/give"
-            className="press font-display text-sm font-semibold tracking-wide bg-[var(--color-brand-red)] text-white px-5 py-2.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all"
-          >
-            Give
-          </Link>
         </nav>
 
         <button
@@ -92,13 +87,6 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
-              <Link
-                to="/give"
-                onClick={() => setOpen(false)}
-                className="press font-display text-sm font-semibold tracking-wide bg-[var(--color-brand-red)] text-white px-5 py-2.5 rounded-full hover:bg-red-700 text-center transition-colors"
-              >
-                Give
-              </Link>
             </div>
           </motion.div>
         )}
