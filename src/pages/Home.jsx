@@ -127,7 +127,7 @@ export default function Home() {
 
       {/* Watch Live - warm cinematic section, only visible during scheduled services */}
       {liveService && (
-        <section id="live-now" className="relative bg-[var(--color-parchment-deep)] py-20 overflow-hidden">
+        <section id="live-now" className="relative bg-[var(--color-parchment)] py-20 overflow-hidden">
           <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
             <div className="flex items-center gap-3 justify-center mb-8">
               <span className="relative flex h-2.5 w-2.5">
