@@ -52,12 +52,18 @@ collections:
         label: "Giving Details"
         file: "src/content/give.json"
         fields:
-          - { label: "UPI ID", name: "upi_id", widget: "string" }
-          - { label: "UPI QR Code Image", name: "qr_image", widget: "image", required: false, hint: "Upload a screenshot of the UPI QR code. Shows on the Give page alongside the UPI ID." }
-          - { label: "Bank Account Name", name: "account_name", widget: "string" }
-          - { label: "Bank Name & Branch", name: "bank_name", widget: "string" }
-          - { label: "Account Number", name: "account_number", widget: "string" }
-          - { label: "IFSC Code", name: "ifsc_code", widget: "string" }
+          - label: "Giving Entities"
+            name: "entities"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "Entity Name", name: "name", widget: "string", hint: "e.g., El Shaddai Mission Trust" }
+              - { label: "UPI ID", name: "upi_id", widget: "string" }
+              - { label: "UPI QR Code Image", name: "qr_image", widget: "image", required: false, hint: "Upload a screenshot of the UPI QR code." }
+              - { label: "Bank Account Name", name: "account_name", widget: "string" }
+              - { label: "Bank Name & Branch", name: "bank_name", widget: "string" }
+              - { label: "Account Number", name: "account_number", widget: "string" }
+              - { label: "IFSC Code", name: "ifsc_code", widget: "string" }
 
   # ---------------------------------------------------------------------
   - name: "leaders"
