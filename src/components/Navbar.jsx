@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import settingsData from '../content/settings.json'
 
@@ -17,18 +17,16 @@ const LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { scrollY } = useScroll()
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setScrolled(latest > 40)
+  })
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'glass-nav py-2' : 'bg-transparent py-5'
+        scrolled ? 'glass-nav py-2' : 'bg-transparent py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
@@ -37,7 +35,7 @@ export default function Navbar() {
             src={settingsData.logo}
             alt="El Shaddai Worship Center"
             className="transition-all duration-500 w-auto hover:opacity-85"
-            style={{ height: scrolled ? 60 : 75 }}
+            style={{ height: scrolled ? 48 : 60 }}
           />
         </Link>
 

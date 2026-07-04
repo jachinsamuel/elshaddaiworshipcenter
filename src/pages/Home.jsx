@@ -20,7 +20,7 @@ const YOUTUBE_CHANNEL_ID = settingsData.youtube_channel_id
 
 const ABOUT_STATS = [
   { label: 'Started At', value: aboutContent.founding_summary || 'Founded in 1985 by our Founding Apostle, in a small gathering of believers.' },
-  { label: 'Location', value: 'Nagercoil, Tamil Nadu — serving the community for over four decades.' },
+  { label: 'Location', value: 'Nagercoil, Tamil Nadu, serving the community for over four decades.' },
 ]
 
 export default function Home() {
@@ -37,13 +37,13 @@ export default function Home() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
       <Seo
         title="Home"
-        description="El Shaddai Worship Center, Nagercoil — a family of faith rooted in apostolic truth and Holy Ghost power. Join us for worship, watch live, and find your place to belong."
+        description="El Shaddai Worship Center, Nagercoil, a family of faith rooted in apostolic truth and Holy Ghost power. Join us for worship, watch live, and find your place to belong."
       />
       {/* Hero — raw video, no overlays. Asymmetric serif headline with a
           hand-drawn underline stroke as the page's signature mark, and a
           mountain-ridge edge (the El Shaddai motif) cutting into the next
           section instead of a generic fade. */}
-      <section id="hero" className="relative h-screen w-full overflow-hidden bg-[var(--color-slate-deep)]">
+      <section id="hero" className="relative min-h-[100dvh] w-full overflow-hidden bg-[var(--color-slate-deep)]">
         <video
           className="absolute inset-0 w-full h-full object-cover"
           src={settingsData.hero_video}
@@ -135,7 +135,7 @@ export default function Home() {
             <div className="flex items-center gap-2.5 justify-center mb-6">
               <Radio size={16} className="text-[var(--color-brand-red)]" />
               <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-brand-red)] section-eyebrow">
-                LIVE NOW &mdash; {liveService.title.toUpperCase()}
+                LIVE NOW | {liveService.title.toUpperCase()}
               </p>
             </div>
             <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10">
@@ -238,9 +238,6 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
           >
-            <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
-              {leadersData.head_pastor.role.toUpperCase()}
-            </p>
             <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)] mb-5">
               {leadersData.head_pastor.name}
             </h2>
@@ -273,7 +270,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-14 shadow-2xl"
+            className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-14 shadow-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
           >
             {/* Header: Our Services */}
             <div className="flex flex-col items-center mb-10">
@@ -326,9 +323,6 @@ export default function Home() {
         <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
-                MARK YOUR CALENDAR
-              </p>
               <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">Upcoming Events</h2>
             </div>
           </div>
@@ -370,9 +364,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10 mb-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-3">
-                LIFE AT EL SHADDAI
-              </p>
               <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">Glimpses of Worship</h2>
             </div>
           </div>
