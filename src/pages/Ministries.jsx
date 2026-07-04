@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Sprout, BookOpen, HeartHandshake } from 'lucide-react'
+
 import PageHeader from '../components/PageHeader'
 import Seo from '../components/Seo'
 import TiltCard from '../components/TiltCard'
@@ -7,20 +7,7 @@ import FallbackImage from '../components/FallbackImage'
 import ministriesData from '../content/ministries.json'
 import pageHeaders from '../content/page-headers.json'
 
-// Icon + accent color stay fixed per ministry (a visual choice, not
-// something a content editor needs to change). Title, description, and
-// image come from src/content/ministries.json, editable via the CMS.
-const ICON_META = {
-  youth: { icon: Sprout, color: 'text-[var(--color-brand-red)]' },
-  'sunday-school': { icon: BookOpen, color: 'text-[var(--color-royal)]' },
-  women: { icon: HeartHandshake, color: 'text-[var(--color-gold)]' },
-}
-
-const MINISTRIES = ministriesData.ministries.map((m) => ({
-  ...m,
-  icon: ICON_META[m.id]?.icon ?? Sprout,
-  color: ICON_META[m.id]?.color ?? 'text-[var(--color-royal)]',
-}))
+const MINISTRIES = ministriesData.ministries
 
 export default function Ministries() {
   return (
@@ -36,7 +23,7 @@ export default function Ministries() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-7">
-          {MINISTRIES.map(({ id, icon: Icon, title, description, image, color }, i) => (
+          {MINISTRIES.map(({ id, title, description, image }, i) => (
             <motion.div
               key={id}
               initial={{ opacity: 0, y: 24 }}
@@ -54,7 +41,6 @@ export default function Ministries() {
                   />
                 </div>
                 <div className="p-6">
-                  <Icon className={`${color} mb-3 transition-transform duration-300 group-hover:scale-110`} size={26} strokeWidth={1.7} />
                   <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-2">{title}</h3>
                   <p className="text-sm text-stone-500 leading-relaxed mb-4">{description}</p>
                   <span className="inline-flex items-center gap-1.5 font-display text-sm font-semibold text-stone-400 cursor-default w-fit">

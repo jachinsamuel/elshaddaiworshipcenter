@@ -184,11 +184,7 @@ collections:
             widget: "list"
             hint: "The 3 ministry cards on the Ministries page."
             fields:
-              - label: "Ministry"
-                name: "id"
-                widget: "select"
-                options: ["youth", "sunday-school", "women"]
-                hint: "Controls which icon shows — don't add new options without updating the code."
+              - { label: "Ministry Identifier", name: "id", widget: "string", hint: "A unique lowercase identifier, e.g. youth, men, kids." }
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "description", widget: "text" }
               - { label: "Photo", name: "image", widget: "image" }
