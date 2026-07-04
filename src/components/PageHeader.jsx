@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import RidgeDivider from './RidgeDivider'
+import TextReveal from './TextReveal'
 
 export default function PageHeader({ eyebrow, title, image }) {
   return (
@@ -21,41 +22,16 @@ export default function PageHeader({ eyebrow, title, image }) {
             {eyebrow}
           </motion.p>
         )}
-        <motion.h1
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.08,
-                delayChildren: 0.1,
-              },
-            },
-          }}
-          initial="hidden"
-          animate="visible"
-          className="font-serif text-4xl md:text-6xl font-medium text-white tracking-tight flex flex-wrap justify-center gap-x-3"
-        >
-          {title ? title.split(' ').map((word, idx) => (
-            <motion.span
-              key={idx}
-              variants={{
-                hidden: { opacity: 0, y: 12 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.45,
-                    ease: 'easeOut',
-                  },
-                },
-              }}
-              className="inline-block"
-            >
-              {word}
-            </motion.span>
-          )) : null}
-        </motion.h1>
+        {title && (
+          <TextReveal
+            text={title}
+            as="h1"
+            splitBy="words"
+            staggerDelay={0.06}
+            duration={0.6}
+            className="font-serif text-4xl md:text-6xl font-medium text-white tracking-tight flex flex-wrap justify-center"
+          />
+        )}
       </div>
       {/* Mountain-ridge signature edge — repeats on every subpage header */}
       <RidgeDivider color="var(--color-parchment)" peakUp />
