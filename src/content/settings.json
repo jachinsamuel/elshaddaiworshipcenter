@@ -1,10 +1,10 @@
 {
   "youtube_channel_id": "YOUR_CHANNEL_ID",
   "youtube_watch_url": "https://youtube.com",
-  "facebook_url": "#",
-  "instagram_url": "#",
-  "youtube_url": "#",
+  "facebook_url": "https://www.facebook.com/people/Elshaddai-Worship-Center-Nagercoil/100064753836792/",
+  "instagram_url": "https://www.instagram.com/elshaddai_worship_center/",
+  "youtube_url": "https://www.youtube.com/@elshaddaiworshipcenter",
   "logo": "/logo.png",
   "footer_logo": "/footer-logo.png",
-  "hero_video": "/hero-video.mp4"
+  "hero_video": "abcd"
 }
