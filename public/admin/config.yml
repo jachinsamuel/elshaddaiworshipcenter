@@ -21,7 +21,7 @@ collections:
         file: "src/content/settings.json"
         fields:
           - { label: "Logo", name: "logo", widget: "image" }
-	  - { label: "Footer Logo", name: "footer_logo", widget: "image" }
+          - { label: "Footer Logo", name: "footer_logo", widget: "image" }
           - { label: "Hero Video (homepage background)", name: "hero_video", widget: "file", hint: "MP4 file, plays muted and looped behind the homepage title." }
           - { label: "YouTube Channel ID", name: "youtube_channel_id", widget: "string", hint: "Starts with UC... Find it under YouTube Studio > Settings > Channel > Advanced settings. Used to auto-embed the live stream during service hours." }
           - { label: "YouTube Channel URL (Watch Live button)", name: "youtube_watch_url", widget: "string" }
@@ -85,8 +85,8 @@ collections:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Role Title", name: "role", widget: "string" }
               - { label: "Main Portrait", name: "image", widget: "image" }
-	      - { label: "Thumbnail Photo 1", name: "secondary_image", widget: "image" }
-	      - { label: "Thumbnail Photo 2", name: "secondary_image_2", widget: "image" }
+              - { label: "Thumbnail Photo 1", name: "secondary_image", widget: "image" }
+              - { label: "Thumbnail Photo 2", name: "secondary_image_2", widget: "image" }
               - { label: "Bio — Introduction", name: "bio_intro", widget: "text" }
               - { label: "Bio — Family", name: "bio_family", widget: "text" }
               - { label: "Homepage Short Blurb", name: "home_blurb", widget: "text" }
