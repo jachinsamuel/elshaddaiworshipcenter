@@ -166,10 +166,6 @@ collections:
               - { label: "End Time", name: "end_time", widget: "string", hint: "24-hour format HH:MM, e.g. 08:30 or 20:30" }
               - { label: "Note (optional)", name: "note", widget: "string", required: false }
               - { label: "Photo", name: "image", widget: "image" }
-              - label: "Accent Color"
-                name: "accent"
-                widget: "select"
-                options: ["royal", "red", "gold"]
 
   # ---------------------------------------------------------------------
   - name: "ministries"
@@ -187,7 +183,10 @@ collections:
               - { label: "Ministry Identifier", name: "id", widget: "string", hint: "A unique lowercase identifier, e.g. youth, men, kids." }
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "description", widget: "text" }
+              - { label: "Meeting / Service Timing (optional)", name: "timing", widget: "string", required: false, hint: "e.g., 'Saturdays 6:00 PM', 'Sundays 9:30 AM'. Shows as a badge below the title." }
               - { label: "Photo", name: "image", widget: "image" }
+              - { label: "Button / Status Label Text", name: "cta_text", widget: "string", required: false, hint: "e.g., 'Coming Soon', 'Join Group', 'Register'. Defaults to 'Coming Soon'." }
+              - { label: "Button Link URL (optional)", name: "cta_link", widget: "string", required: false, hint: "e.g., a WhatsApp link, a Google form URL, or a subpage like /contact. If left blank, it stays as a static label." }
 
   # ---------------------------------------------------------------------
   - name: "sermons"

@@ -4,19 +4,28 @@
       "id": "youth",
       "title": "Youth Fellowship",
       "description": "A vibrant community for teens and young adults to grow in faith, friendship, and purpose.",
-      "image": "/ministries/youth.jpg"
+      "image": "/ministries/youth.jpg",
+      "cta_text": "Coming Soon",
+      "cta_link": "",
+      "timing": "Saturdays 6:00 PM"
     },
     {
       "id": "sunday-school",
       "title": "Sunday School",
       "description": "Building strong foundations in scripture for children, taught through stories, song, and play.",
-      "image": "/ministries/sunday-school.jpg"
+      "image": "/ministries/sunday-school.jpg",
+      "cta_text": "Coming Soon",
+      "cta_link": "",
+      "timing": "Sundays 8:30 AM"
     },
     {
       "id": "women",
       "title": "Women's Ministry",
       "description": "A circle of prayer, mentorship, and fellowship for women at every season of life.",
-      "image": "/ministries/women.jpg"
+      "image": "/ministries/women.jpg",
+      "cta_text": "Coming Soon",
+      "cta_link": "",
+      "timing": "Fridays 10:00 AM"
     }
   ]
 }

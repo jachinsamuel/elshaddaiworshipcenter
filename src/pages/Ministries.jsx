@@ -23,7 +23,7 @@ export default function Ministries() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-7">
-          {MINISTRIES.map(({ id, title, description, image }, i) => (
+          {MINISTRIES.map(({ id, title, description, image, cta_text, cta_link, timing }, i) => (
             <motion.div
               key={id}
               initial={{ opacity: 0, y: 24 }}
@@ -41,11 +41,28 @@ export default function Ministries() {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-2">{title}</h3>
+                  <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-1">{title}</h3>
+                  {timing && (
+                    <p className="text-xs font-display font-semibold uppercase tracking-wider text-[var(--color-gold)] mb-3">
+                      {timing}
+                    </p>
+                  )}
                   <p className="text-sm text-stone-500 leading-relaxed mb-4">{description}</p>
-                  <span className="inline-flex items-center gap-1.5 font-display text-sm font-semibold text-stone-400 cursor-default w-fit">
-                    Coming Soon
-                  </span>
+                  
+                  {cta_link ? (
+                    <a
+                      href={cta_link}
+                      target={cta_link.startsWith('http') ? '_blank' : undefined}
+                      rel={cta_link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="press inline-flex items-center gap-1 font-display text-sm font-bold text-[var(--color-royal)] hover:text-[var(--color-royal-dark)] transition-colors w-fit"
+                    >
+                      {cta_text || 'Learn More'} &rarr;
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 font-display text-sm font-semibold text-stone-400 cursor-default w-fit">
+                      {cta_text || 'Coming Soon'}
+                    </span>
+                  )}
                 </div>
               </TiltCard>
             </motion.div>
