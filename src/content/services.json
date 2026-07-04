@@ -34,8 +34,8 @@
       "id": "saturday-worship",
       "day": "Saturday",
       "title": "Night Worship",
-      "start_time": "19:00",
-      "end_time": "20:30",
+      "start_time": "20:00",
+      "end_time": "21:30",
       "note": "Revival & Bible Study",
       "image": "/services/saturday-worship.jpg",
       "accent": "royal"
