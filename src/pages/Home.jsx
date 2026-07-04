@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { PlayCircle, ArrowRight } from 'lucide-react'
 import RidgeDivider from '../components/RidgeDivider'
 import Seo from '../components/Seo'
 import FallbackImage from '../components/FallbackImage'
-import { SCHEDULE } from '../lib/schedule'
+import { getLiveService, SCHEDULE } from '../lib/schedule'
 import settingsData from '../content/settings.json'
 import leadersData from '../content/leaders.json'
 import aboutContent from '../content/about-content.json'
@@ -15,6 +16,7 @@ import MagneticElement from '../components/MagneticElement'
 import AlternatingScripture from '../components/AlternatingScripture'
 
 
+const YOUTUBE_CHANNEL_ID = settingsData.youtube_channel_id
 
 const ABOUT_STATS = [
   { label: 'Started At', value: aboutContent.founding_summary || 'Founded in 1985 by our Founding Apostle, in a small gathering of believers.' },
@@ -22,6 +24,13 @@ const ABOUT_STATS = [
 ]
 
 export default function Home() {
+  const [liveService, setLiveService] = useState(() => getLiveService())
+
+  useEffect(() => {
+    const interval = setInterval(() => setLiveService(getLiveService()), 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
       <Seo
@@ -62,16 +71,31 @@ export default function Home() {
                 transition={{ duration: 0.7, ease: 'easeOut', delay: 0.7 }}
                 className="flex flex-wrap gap-4 mt-8"
               >
-                <MagneticElement>
-                  <a
-                    href={settingsData.youtube_watch_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="press group inline-flex items-center gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg"
-                  >
-                    <PlayCircle size={18} /> Watch Live
-                  </a>
-                </MagneticElement>
+                {liveService ? (
+                  <MagneticElement>
+                    <a
+                      href="#live-now"
+                      className="press group inline-flex items-center gap-2 bg-white text-[var(--color-slate-deep)] font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-[var(--color-gold)] hover:text-white hover:-translate-y-0.5 transition-all shadow-lg"
+                    >
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
+                      </span>
+                      Watch Live Now
+                    </a>
+                  </MagneticElement>
+                ) : (
+                  <MagneticElement>
+                    <a
+                      href={settingsData.youtube_watch_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="press group inline-flex items-center gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg"
+                    >
+                      <PlayCircle size={18} /> Watch Live
+                    </a>
+                  </MagneticElement>
+                )}
                 <MagneticElement>
                   <a
                     href="#schedule"
@@ -101,8 +125,35 @@ export default function Home() {
         <RidgeDivider color="var(--color-parchment)" peakUp />
       </section>
 
-
-
+      {/* Watch Live - warm cinematic section, only visible during scheduled services */}
+      {liveService && (
+        <section id="live-now" className="relative bg-[var(--color-slate-deep)] py-20 overflow-hidden">
+          <div className="grain absolute inset-0" />
+          <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
+            <div className="flex items-center gap-3 justify-center mb-8">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-gold)] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-gold)]" />
+              </span>
+              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-gold)] section-eyebrow">
+                LIVE NOW | {liveService.title.toUpperCase()}
+              </p>
+            </div>
+            <div className="aspect-video rounded-2xl overflow-hidden border border-[var(--color-gold)]/20 shadow-[0_0_40px_-10px_rgba(182,134,44,0.15)]">
+              <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0`}
+                title="Live service stream"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <p className="text-center text-white/40 text-sm mt-6">
+              Can't see the stream? <a href={settingsData.youtube_watch_url} target="_blank" rel="noopener noreferrer" className="text-[var(--color-gold)] hover:text-[var(--color-gold)]/80 transition-colors">Watch directly on YouTube</a>.
+            </p>
+          </div>
+        </section>
+      )}
       {/* About the church — brief intro with image, mirroring the reference
           site's homepage pattern. Full founding story stays on the About
           page; this is just enough to orient a first-time visitor. */}
