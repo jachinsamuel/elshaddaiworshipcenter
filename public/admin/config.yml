@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: master
 
 # This assumes the site is hosted on Netlify, which provides Identity +
 # Git Gateway for free — meaning logins and git commits are handled by
