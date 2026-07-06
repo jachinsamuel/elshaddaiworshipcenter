@@ -102,6 +102,7 @@ export default function Give() {
                       {[
                         ['Account Name', entity.account_name, 'name'],
                         ['Bank', entity.bank_name, 'bank'],
+                        ['Branch', entity.branch_name, 'branch'],
                         ['Account Number', entity.account_number, 'acc'],
                         ['IFSC Code', entity.ifsc_code, 'ifsc'],
                       ].map(([label, value, key]) => (

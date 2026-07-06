@@ -61,7 +61,8 @@ collections:
               - { label: "UPI ID", name: "upi_id", widget: "string" }
               - { label: "UPI QR Code Image", name: "qr_image", widget: "image", required: false, hint: "Upload a screenshot of the UPI QR code." }
               - { label: "Bank Account Name", name: "account_name", widget: "string" }
-              - { label: "Bank Name & Branch", name: "bank_name", widget: "string" }
+              - { label: "Bank Name", name: "bank_name", widget: "string", hint: "e.g., State Bank of India" }
+              - { label: "Branch Name", name: "branch_name", widget: "string", hint: "e.g., Main Branch, Nagercoil" }
               - { label: "Account Number", name: "account_number", widget: "string" }
               - { label: "IFSC Code", name: "ifsc_code", widget: "string" }
 
