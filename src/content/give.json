@@ -4,19 +4,19 @@
       "name": "El Shaddai Mission Trust",
       "upi_id": "elshaddai@upi",
       "qr_image": "",
-      "account_name": "El Shaddai Worship Center Trust",
-      "bank_name": "State Bank of India, Main Branch, Nagercoil",
-      "account_number": "3578 9012 4456",
-      "ifsc_code": "SBIN0001234"
+      "account_name": "Elshaddai Mission Trust",
+      "bank_name": "UNION BANK OF INDIA, Branch : NAGERCOIL",
+      "account_number": "510101001804676",
+      "ifsc_code": "UBIN0907537"
     },
     {
       "name": "Hope Givers Charity Foundation",
       "upi_id": "hopegivers@upi",
       "qr_image": "",
       "account_name": "Hope Givers Charity Foundation",
-      "bank_name": "ICICI Bank, Nagercoil",
-      "account_number": "501002345678",
-      "ifsc_code": "ICIC0000123"
+      "bank_name": "UNION BANK OF INDIA, Branch : NAGERCOIL",
+      "account_number": "075321010000049",
+      "ifsc_code": "UBIN0907537"
     }
   ]
 }
