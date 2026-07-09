@@ -52,7 +52,7 @@ export default function Sermons() {
                     <FallbackImage
                       src={s.thumb}
                       alt={s.title}
-                      className="w-full h-full object-cover transition-transform duration-500"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
                       <PlayCircle className="text-white drop-shadow-lg transition-transform duration-300 group-hover:scale-110" size={56} strokeWidth={1.4} />

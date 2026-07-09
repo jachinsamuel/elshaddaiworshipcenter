@@ -37,7 +37,7 @@ export default function Ministries() {
                   <FallbackImage
                     src={image}
                     alt={title}
-                    className="w-full h-full object-cover transition-transform duration-500"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
                 <div className="p-6">

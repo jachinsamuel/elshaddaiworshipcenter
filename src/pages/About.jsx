@@ -38,8 +38,12 @@ export default function About() {
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="relative order-2 md:order-1 mb-8 aspect-[4/5] max-h-[480px] w-full max-w-[440px] md:justify-self-start"
         >
-          <TiltCard className="relative rounded-2xl overflow-hidden shadow-lg w-full h-full bg-stone-100">
-            <FallbackImage src={aboutContent.sanctuary_image} alt="El Shaddai Worship Center sanctuary interior" className="w-full h-full object-cover" />
+          <TiltCard className="relative group rounded-2xl overflow-hidden shadow-lg w-full h-full bg-stone-100">
+            <FallbackImage
+              src={aboutContent.sanctuary_image}
+              alt="El Shaddai Worship Center sanctuary interior"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            />
           </TiltCard>
           <div className="absolute -bottom-6 -right-6 z-10 bg-[var(--color-slate-deep)] text-white px-6 py-4 rounded-xl shadow-xl max-w-[220px]">
             <p className="font-display text-2xl font-bold leading-none">40+</p>
@@ -140,7 +144,7 @@ export default function About() {
                 <FallbackImage
                   src={leadersData.founder.image}
                   alt={leadersData.founder.name}
-                  className="w-full h-full object-cover transition-transform duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
               </TiltCard>
             </motion.div>

@@ -203,7 +203,7 @@ export default function Home() {
               <FallbackImage
                 src={aboutContent.sanctuary_image}
                 alt="El Shaddai sanctuary"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
             </TiltCard>
           </motion.div>
@@ -226,7 +226,7 @@ export default function Home() {
               <FallbackImage
                 src={leadersData.head_pastor.image}
                 alt={leadersData.head_pastor.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
             </TiltCard>
           </motion.div>
@@ -336,10 +336,14 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className="w-full h-full"
               >
-                <TiltCard className="rounded-2xl border border-stone-100 shadow-sm bg-white overflow-hidden cursor-default h-full">
+                <TiltCard className="group rounded-2xl border border-stone-100 shadow-sm bg-white overflow-hidden cursor-default h-full">
                   {event.image && (
                     <div className="relative overflow-hidden aspect-video bg-stone-100">
-                      <FallbackImage src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                      <FallbackImage
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
                     </div>
                   )}
                   <div className="p-6">

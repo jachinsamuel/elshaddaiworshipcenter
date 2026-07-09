@@ -42,7 +42,7 @@ export default function AlternatingScripture({
           }`}
         >
           {isTamil ? `"${tamil}"` : `"${amp}"`}
-          <span className="block mt-1 text-xs font-display font-semibold uppercase tracking-widest text-[var(--color-gold)] not-italic">
+          <span className="block mt-1 pb-0.5 text-xs font-display font-semibold uppercase tracking-widest text-[var(--color-gold)] not-italic">
             · {isTamil ? citationTamil : citationAmp}
           </span>
         </motion.p>
