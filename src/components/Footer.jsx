@@ -87,10 +87,16 @@ export default function Footer() {
         <motion.div custom={3} variants={fadeUp}>
           <h4 className="font-display text-white text-sm font-semibold tracking-widest mb-4 section-eyebrow">CONTACT US</h4>
           <p className="text-sm flex items-center gap-2 mb-2">
-            <Phone size={16} className="text-[var(--color-brand-red)]" /> {contactData.phone}
+            <Phone size={16} className="text-[var(--color-brand-red)] shrink-0" />
+            <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`} className="hover:text-white transition-colors">
+              {contactData.phone}
+            </a>
           </p>
           <p className="text-sm flex items-center gap-2">
-            <Mail size={16} className="text-[var(--color-brand-red)]" /> {contactData.email}
+            <Mail size={16} className="text-[var(--color-brand-red)] shrink-0" />
+            <a href={`mailto:${contactData.email}`} className="hover:text-white transition-colors">
+              {contactData.email}
+            </a>
           </p>
         </motion.div>
       </motion.div>

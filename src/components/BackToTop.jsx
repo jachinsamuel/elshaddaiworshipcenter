@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import { ChevronUp } from 'lucide-react'
 
 // Floating "Back to Top" button — appears after the user scrolls past
@@ -7,13 +7,11 @@ import { ChevronUp } from 'lucide-react'
 // colors, with a Framer Motion fade-in/out so it doesn't pop abruptly.
 export default function BackToTop() {
   const [visible, setVisible] = useState(false)
+  const { scrollY } = useScroll()
 
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 400)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setVisible(latest > 400)
+  })
 
   return (
     <AnimatePresence>

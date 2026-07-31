@@ -156,6 +156,7 @@ collections:
           - label: "Services"
             name: "services"
             widget: "list"
+            summary: "{{fields.title}} ({{fields.day}})"
             fields:
               - { label: "Internal ID (don't change)", name: "id", widget: "string" }
               - label: "Day"
@@ -214,6 +215,7 @@ collections:
           - label: "Events"
             name: "events"
             widget: "list"
+            summary: "{{fields.title}} ({{fields.date}})"
             hint: "Add upcoming events. They appear on the homepage automatically. Remove past events to keep the list current."
             fields:
               - { label: "Event Title", name: "title", widget: "string" }

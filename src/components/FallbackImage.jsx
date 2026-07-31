@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ImageOff } from 'lucide-react'
 
 // Drop-in <img> replacement with shimmer loading state and error fallback.
@@ -8,8 +8,15 @@ import { ImageOff } from 'lucide-react'
 // shimmer to display correctly. Most image containers in this codebase
 // already satisfy both requirements.
 export default function FallbackImage({ src, alt = '', className = '', ...props }) {
+  const imgRef = useRef(null)
   const [loaded, setLoaded] = useState(false)
   const [errored, setErrored] = useState(false)
+
+  useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
+      setLoaded(true)
+    }
+  }, [src])
 
   if (errored || !src) {
     return (
@@ -18,7 +25,7 @@ export default function FallbackImage({ src, alt = '', className = '', ...props 
         role="img"
         aria-label={alt}
       >
-        <ImageOff size={28} className="text-stone-300" />
+        <ImageOff size={28} className="text-stone-300" strokeWidth={1.5} />
       </div>
     )
   }
@@ -27,6 +34,7 @@ export default function FallbackImage({ src, alt = '', className = '', ...props 
     <>
       {!loaded && <div className="absolute inset-0 shimmer z-[1]" aria-hidden="true" />}
       <img
+        ref={imgRef}
         src={src}
         alt={alt}
         loading="lazy"

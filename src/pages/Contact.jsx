@@ -6,6 +6,7 @@ import Seo from '../components/Seo'
 import contactData from '../content/contact.json'
 import pageHeaders from '../content/page-headers.json'
 
+const cleanWhatsappNumber = contactData.whatsapp_number ? contactData.whatsapp_number.replace(/\D/g, '') : ''
 const whatsappMessage = encodeURIComponent("Hi, I'd like to know more about El Shaddai Worship Center")
 
 export default function Contact() {
@@ -106,11 +107,15 @@ export default function Contact() {
             </div>
             <div className="flex gap-4">
               <Phone className="text-[var(--color-brand-red)] shrink-0" size={22} strokeWidth={1.5} />
-              <p className="text-sm text-white/80">{contactData.phone}</p>
+              <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`} className="text-sm text-white/80 hover:text-white hover:underline transition-colors">
+                {contactData.phone}
+              </a>
             </div>
             <div className="flex gap-4">
               <Mail className="text-[var(--color-brand-red)] shrink-0" size={22} strokeWidth={1.5} />
-              <p className="text-sm text-white/80">{contactData.email}</p>
+              <a href={`mailto:${contactData.email}`} className="text-sm text-white/80 hover:text-white hover:underline transition-colors">
+                {contactData.email}
+              </a>
             </div>
           </motion.div>
         </div>
@@ -146,7 +151,7 @@ export default function Contact() {
               Join Group
             </a>
             <a
-              href={`https://wa.me/${contactData.whatsapp_number}?text=${whatsappMessage}`}
+              href={`https://wa.me/${cleanWhatsappNumber}?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
               className="press flex-1 sm:flex-none inline-flex items-center justify-center gap-2 border border-[#25D366] text-[#1faa53] font-display font-semibold text-sm px-6 py-3 rounded-full hover:bg-[#25D366]/10 hover:-translate-y-0.5 transition-all"
