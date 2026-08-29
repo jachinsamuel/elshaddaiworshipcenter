@@ -128,7 +128,7 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="hover-lift mt-8 rounded-2xl border border-[#25D366]/20 bg-[#25D366]/[0.06] p-8 flex flex-col sm:flex-row items-center justify-between gap-6"
+          className="hover-lift mt-8 rounded-2xl border border-[#25D366]/20 bg-[#25D366]/[0.06] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shrink-0">
@@ -167,7 +167,7 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mt-8 rounded-2xl overflow-hidden border border-stone-100 shadow-sm h-[420px]"
+          className="mt-8 rounded-2xl overflow-hidden border border-stone-100 shadow-sm h-[320px] sm:h-[420px]"
         >
           <iframe
             title="El Shaddai Worship Center Location"

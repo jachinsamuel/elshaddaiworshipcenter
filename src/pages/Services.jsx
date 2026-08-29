@@ -14,14 +14,14 @@ export default function Services() {
       <Seo title="Services" description="Our full weekly worship schedule. Sunday services, Friday fasting prayer, and Saturday night worship at El Shaddai Worship Center, Nagercoil." />
       <PageHeader eyebrow="WEEKLY RHYTHM" title="Services" image={pageHeaders.services} />
 
-      <section className="max-w-6xl mx-auto px-6 lg:px-10 py-24">
-        <div className="text-center max-w-2xl mx-auto mb-14">
+      <section className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
             Find Your Time to Gather
           </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
           {SCHEDULE.map((s, i) => (
             <motion.div
               key={s.id}
@@ -31,15 +31,15 @@ export default function Services() {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="w-full h-full"
             >
-              <TiltCard className="group relative rounded-2xl overflow-hidden shadow-sm aspect-[5/4] bg-stone-200 cursor-default h-full">
+              <TiltCard className="group relative rounded-2xl overflow-hidden shadow-sm aspect-[4/3] sm:aspect-[5/4] bg-stone-200 cursor-default h-full">
                 <FallbackImage
                   src={s.image}
                   alt={s.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/20 to-transparent" />
 
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
                   <p className="font-display text-xs font-semibold tracking-widest text-white/70 mb-1">
                     {s.dayLabel.toUpperCase()}
                   </p>

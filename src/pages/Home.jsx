@@ -50,8 +50,8 @@ export default function Home() {
           loop
           playsInline
         />
-        <div className="relative h-full flex flex-col justify-end pb-32 px-6 lg:px-16 max-w-7xl mx-auto w-full">
-          <div className="grid md:grid-cols-12 gap-8 items-end w-full">
+        <div className="relative h-full flex flex-col justify-end pb-20 sm:pb-28 md:pb-32 px-5 sm:px-6 lg:px-16 max-w-7xl mx-auto w-full">
+          <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-end w-full">
             {/* Title & Buttons Column */}
             <div className="md:col-span-7 flex flex-col items-start">
               <motion.h1
@@ -69,17 +69,17 @@ export default function Home() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: 'easeOut', delay: 0.7 }}
-                className="flex flex-wrap gap-4 mt-8"
+                className="flex flex-row flex-nowrap items-center gap-2.5 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto"
               >
                 {liveService ? (
                   <MagneticElement>
                     <a
                       href="#live-now"
-                      className="press group inline-flex items-center gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg"
+                      className="press group inline-flex items-center gap-1.5 sm:gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-xs sm:text-sm tracking-wide px-4 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg whitespace-nowrap"
                     >
-                      <span className="relative flex h-2.5 w-2.5">
+                      <span className="relative flex h-2 sm:h-2.5 w-2 sm:w-2.5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
+                        <span className="relative inline-flex rounded-full h-2 sm:h-2.5 w-2 sm:w-2.5 bg-white" />
                       </span>
                       Watch Live Now
                     </a>
@@ -90,18 +90,18 @@ export default function Home() {
                       href={settingsData.youtube_watch_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="press group inline-flex items-center gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg"
+                      className="press group inline-flex items-center gap-1.5 sm:gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-xs sm:text-sm tracking-wide px-4 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg whitespace-nowrap"
                     >
-                      <PlayCircle size={18} /> Watch Live
+                      <PlayCircle size={16} className="sm:w-[18px] sm:h-[18px]" /> Watch Live
                     </a>
                   </MagneticElement>
                 )}
                 <MagneticElement>
                   <a
                     href="#schedule"
-                    className="press group inline-flex items-center gap-2 border border-white/40 text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-white/10 hover:-translate-y-0.5 transition-all shadow-lg"
+                    className="press group inline-flex items-center gap-1.5 sm:gap-2 border border-white/40 text-white font-display font-semibold text-xs sm:text-sm tracking-wide px-4 sm:px-7 py-3 sm:py-3.5 rounded-full hover:bg-white/10 hover:-translate-y-0.5 transition-all shadow-lg whitespace-nowrap"
                   >
-                    Join Service <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                    Join Service <ArrowRight size={15} className="sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform" />
                   </a>
                 </MagneticElement>
               </motion.div>
@@ -256,24 +256,24 @@ export default function Home() {
       {/* Schedule preview section — redesigned based on the user's reference image */}
       <section
         id="schedule"
-        className="relative py-28 overflow-hidden bg-cover bg-center text-white"
+        className="relative py-20 sm:py-28 overflow-hidden bg-cover bg-center text-white"
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(10,10,12,0.85), rgba(10,10,12,0.85)), url(${aboutContent.sanctuary_image})`,
         }}
       >
         <div className="grain absolute inset-0 opacity-[0.03]" />
         
-        <div className="relative max-w-4xl mx-auto px-6 text-center">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-14 shadow-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+            className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-14 shadow-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
           >
             {/* Header: Our Services */}
-            <div className="flex flex-col items-center mb-10">
-              <h2 className="font-display text-4xl md:text-5xl font-black tracking-tight text-white uppercase select-none">
+            <div className="flex flex-col items-center mb-8 sm:mb-10">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white uppercase select-none">
                 Our Services
               </h2>
               <div className="w-20 h-1 bg-[var(--color-brand-red)] mt-4 rounded-full" />

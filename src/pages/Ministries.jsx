@@ -15,14 +15,14 @@ export default function Ministries() {
       <Seo title="Ministries" description="Youth Fellowship, Sunday School, and Women's Ministry. Find your place to grow and serve at El Shaddai Worship Center." />
       <PageHeader eyebrow="GET INVOLVED" title="Ministries" image={pageHeaders.ministries} />
 
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
-        <div className="text-center max-w-2xl mx-auto mb-14">
+      <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
             A Place for Every Season
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-7">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {MINISTRIES.map(({ id, title, description, image, cta_text, cta_link, timing }, i) => (
             <motion.div
               key={id}
@@ -40,7 +40,7 @@ export default function Ministries() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
-                <div className="p-6">
+                <div className="p-5 sm:p-6">
                   <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-1">{title}</h3>
                   {timing && (
                     <p className="text-xs font-display font-semibold uppercase tracking-wider text-[var(--color-gold)] mb-3">

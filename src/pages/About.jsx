@@ -45,8 +45,8 @@ export default function About() {
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           </TiltCard>
-          <div className="absolute -bottom-6 -right-6 z-10 bg-[var(--color-slate-deep)] text-white px-6 py-4 rounded-xl shadow-xl max-w-[220px]">
-            <p className="font-display text-2xl font-bold leading-none">40+</p>
+          <div className="absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 z-10 bg-[var(--color-slate-deep)] text-white px-4 py-3 sm:px-6 sm:py-4 rounded-xl shadow-xl max-w-[190px] sm:max-w-[220px]">
+            <p className="font-display text-xl sm:text-2xl font-bold leading-none">40+</p>
             <p className="text-xs text-white/70 mt-1 leading-snug">Years of Grace &amp; Ministry</p>
           </div>
         </motion.div>

@@ -71,8 +71,8 @@ export default function Give() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between bg-stone-50 hover:bg-stone-100 rounded-lg px-4 py-3 border border-stone-100 transition-colors">
-                      <span className="font-mono text-sm text-[var(--color-slate-deep)]">{entity.upi_id}</span>
+                    <div className="flex items-center justify-between gap-3 bg-stone-50 hover:bg-stone-100 rounded-lg px-3.5 py-3 sm:px-4 border border-stone-100 transition-colors">
+                      <span className="font-mono text-xs sm:text-sm text-[var(--color-slate-deep)] break-all">{entity.upi_id}</span>
                       <MagneticElement>
                         <button
                           onClick={() => copy(entity.upi_id, setCopiedUpi, `${entity.name}-upi`)}
@@ -106,10 +106,10 @@ export default function Give() {
                         ['Account Number', entity.account_number, 'acc'],
                         ['IFSC Code', entity.ifsc_code, 'ifsc'],
                       ].map(([label, value, key]) => (
-                        <div key={key} className="flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] rounded-lg px-4 py-3 border border-white/5 transition-colors">
-                          <div>
+                        <div key={key} className="flex items-center justify-between gap-3 bg-white/[0.03] hover:bg-white/[0.06] rounded-lg px-3.5 py-3 sm:px-4 border border-white/5 transition-colors">
+                          <div className="min-w-0 flex-1">
                             <dt className="text-xs text-white/50">{label}</dt>
-                            <dd className="text-white font-medium">{value}</dd>
+                            <dd className="text-white font-medium text-xs sm:text-sm break-all">{value}</dd>
                           </div>
                           <MagneticElement>
                             <button

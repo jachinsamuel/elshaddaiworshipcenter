@@ -24,14 +24,14 @@ export default function Sermons() {
       <Seo title="Sermons & Media" description="Watch recent sermons and messages from El Shaddai Worship Center, Nagercoil, with scripture references and speaker details." />
       <PageHeader eyebrow="WATCH & LISTEN" title="Sermons & Media" image={pageHeaders.sermons} />
 
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
-        <div className="text-center max-w-2xl mx-auto mb-14">
+      <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
             Recent Messages
           </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-7">
+        <div className="grid sm:grid-cols-2 gap-5 sm:gap-7">
           {SERMONS.map((s, i) => (
             <motion.div
               key={`${s.title}-${s.date}`}
@@ -61,7 +61,7 @@ export default function Sermons() {
                       {s.scripture}
                     </span>
                   </div>
-                  <div className="p-6">
+                  <div className="p-5 sm:p-6">
                     <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-1.5">{s.title}</h3>
                     <p className="text-sm text-stone-500">{s.speaker} &middot; {formatDate(s.date)}</p>
                   </div>
