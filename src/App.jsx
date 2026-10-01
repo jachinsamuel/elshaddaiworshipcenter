@@ -21,6 +21,13 @@ function ScrollToTop() {
   return null
 }
 
+function AdminRedirect() {
+  useEffect(() => {
+    window.location.replace('/admin/index.html')
+  }, [])
+  return null
+}
+
 export default function App() {
   const location = useLocation()
   return (
@@ -37,6 +44,8 @@ export default function App() {
             <Route path="/sermons" element={<Sermons />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/give" element={<Give />} />
+            <Route path="/admin" element={<AdminRedirect />} />
+            <Route path="/admin/*" element={<AdminRedirect />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
