@@ -1,270 +1,387 @@
-import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { PlayCircle, ExternalLink, ListVideo, Calendar, Sparkles } from 'lucide-react'
+import { useState, useMemo, useRef } from 'react'
+import { motion } from 'framer-motion'
+import { PlayCircle, ExternalLink, ListVideo, Calendar, Sparkles, Youtube, Check } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import FallbackImage from '../components/FallbackImage'
 import Seo from '../components/Seo'
 import TiltCard from '../components/TiltCard'
+import MagneticElement from '../components/MagneticElement'
 import pageHeaders from '../content/page-headers.json'
 import playlistsData from '../content/playlists.json'
+import settingsData from '../content/settings.json'
 import { getPlaylistEmbedUrl, getPlaylistWatchUrl } from '../lib/youtube'
 
-// Load individual sermons from src/content/sermons/
-const sermonModules = import.meta.glob('../content/sermons/*.json', { eager: true })
-const SERMONS = Object.values(sermonModules)
-  .map((m) => m.default)
-  .sort((a, b) => new Date(b.date) - new Date(a.date))
-
-function formatDate(isoDate) {
-  return new Date(isoDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-}
-
 export default function Sermons() {
+  const playerRef = useRef(null)
+
   const playlists = useMemo(() => {
     return Array.isArray(playlistsData?.playlists) ? playlistsData.playlists : []
   }, [])
 
-  // Default to the first (latest) playlist
-  const [selectedPlaylistIndex, setSelectedPlaylistIndex] = useState(0)
+  // Extract distinct years sorted descending
+  const availableYears = useMemo(() => {
+    const years = Array.from(new Set(playlists.map((p) => String(p.year || '')).filter(Boolean)))
+    return years.sort((a, b) => b.localeCompare(a))
+  }, [playlists])
 
-  const activePlaylist = playlists[selectedPlaylistIndex] || playlists[0]
+  const [selectedYearFilter, setSelectedYearFilter] = useState('All')
+  const [activePlaylistIndex, setActivePlaylistIndex] = useState(0)
+
+  // Filtered playlists list based on year tab
+  const filteredPlaylists = useMemo(() => {
+    if (selectedYearFilter === 'All') return playlists
+    return playlists.filter((p) => String(p.year) === selectedYearFilter)
+  }, [playlists, selectedYearFilter])
+
+  const activePlaylist = playlists[activePlaylistIndex] || playlists[0]
   const embedUrl = activePlaylist ? getPlaylistEmbedUrl(activePlaylist.url) : null
-  const watchUrl = activePlaylist ? getPlaylistWatchUrl(activePlaylist.url) : 'https://youtube.com'
+  const watchUrl = activePlaylist ? getPlaylistWatchUrl(activePlaylist.url) : settingsData.youtube_url
+
+  const handleSelectPlaylist = (index, shouldScroll = false) => {
+    setActivePlaylistIndex(index)
+    if (shouldScroll && playerRef.current) {
+      playerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
       <Seo
-        title="Sermons & Playlists"
-        description="Watch yearly sermon playlists, Sunday messages, and worship services from El Shaddai Worship Center, Nagercoil."
+        title="Sermons & YouTube Playlists"
+        description="Watch complete yearly sermon playlists, Sunday messages, and worship series from El Shaddai Worship Center, Nagercoil."
       />
       <PageHeader eyebrow="WATCH & LISTEN" title="Sermons & Media" image={pageHeaders.sermons} />
 
-      {/* ------------------------------------------------------------- */}
-      {/* 1. YouTube Playlists Section (Organized by Year: 2026, 2025...) */}
-      {/* ------------------------------------------------------------- */}
-      {playlists.length > 0 && (
-        <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pt-16 sm:pt-20 pb-12 sm:pb-16">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 sm:mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <ListVideo className="text-[var(--color-brand-red)]" size={20} />
-                <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-brand-red)] uppercase">
-                  YEARLY ARCHIVE
-                </p>
+      {/* Main Content Area */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">
+        {/* Intro Scripture Banner */}
+        <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
+          <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-brand-red)] section-eyebrow mb-3 uppercase">
+            THE WORD OF GOD
+          </p>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-ink)] leading-tight">
+            Faith Comes by Hearing
+          </h2>
+          <p className="font-serif italic text-stone-600 text-base sm:text-lg mt-4 leading-relaxed">
+            &ldquo;So faith comes from hearing, and hearing through the word of Christ.&rdquo;
+            <span className="block not-italic font-display text-xs font-semibold uppercase tracking-widest text-stone-400 mt-1.5">
+              Romans 10:17
+            </span>
+          </p>
+          <p className="text-stone-500 text-sm mt-5 leading-relaxed max-w-xl mx-auto">
+            Browse our full video sermon archives. Select a year below to stream complete worship services, powerful preaching, and convention messages directly from our YouTube channel.
+          </p>
+        </div>
+
+        {/* ----------------------------------------------------------------- */}
+        {/* Theater Player Showcase                                           */}
+        {/* ----------------------------------------------------------------- */}
+        {activePlaylist && (
+          <section ref={playerRef} className="scroll-mt-28 mb-20 sm:mb-28">
+            <div className="relative rounded-3xl bg-[var(--color-slate-deep)] border border-white/10 shadow-2xl shadow-black/40 overflow-hidden">
+              {/* Theater Top Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 px-5 sm:px-8 py-3.5 bg-white/[0.03] border-b border-white/10 text-xs font-display">
+                <div className="flex items-center gap-2 text-white/90 font-medium">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
+                  </span>
+                  <span>CONTINUOUS PLAYLIST STREAM</span>
+                </div>
+                <div className="flex items-center gap-3 text-white/60">
+                  <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[var(--color-gold)] font-semibold tracking-wider uppercase text-[11px]">
+                    {activePlaylist.year} SERIES
+                  </span>
+                </div>
               </div>
-              <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
-                Sermons by Year
-              </h2>
-            </div>
-            <p className="text-stone-600 text-sm max-w-md">
-              Explore our full YouTube playlists organized by year. Watch any complete Sunday message series or worship service.
-            </p>
-          </div>
 
-          {/* Year Selector Tabs */}
-          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-3 mb-8 no-scrollbar">
-            {playlists.map((pl, idx) => {
-              const isSelected = idx === selectedPlaylistIndex
-              return (
-                <button
-                  key={`${pl.year}-${idx}`}
-                  type="button"
-                  onClick={() => setSelectedPlaylistIndex(idx)}
-                  className={`press px-5 py-2.5 rounded-full font-display text-xs sm:text-sm font-semibold tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${
-                    isSelected
-                      ? 'bg-[var(--color-brand-red)] text-white shadow-md'
-                      : 'bg-white border border-stone-200 text-stone-700 hover:border-stone-300 hover:bg-stone-50'
-                  }`}
-                >
-                  <Calendar size={14} className={isSelected ? 'text-white' : 'text-stone-400'} />
-                  {pl.year || 'Series'}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Active Featured Playlist Player Card */}
-          {activePlaylist && (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activePlaylist.year + activePlaylist.title}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4 }}
-                className="bg-[var(--color-slate-deep)] text-white rounded-3xl overflow-hidden shadow-2xl border border-white/10 mb-12"
-              >
-                <div className="grid lg:grid-cols-12 gap-0 items-center">
-                  {/* Embedded YouTube Playlist Iframe */}
-                  <div className="lg:col-span-7 bg-black aspect-video relative w-full">
-                    {embedUrl ? (
-                      <iframe
-                        src={embedUrl}
-                        title={activePlaylist.title}
-                        className="w-full h-full border-0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-stone-900">
-                        <PlayCircle size={48} className="text-white/40 mb-3" />
-                        <p className="text-sm text-white/70">Click below to watch directly on YouTube</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Playlist Details */}
-                  <div className="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
-                    <div className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full bg-[var(--color-brand-red)]/20 text-[var(--color-brand-red)] border border-[var(--color-brand-red)]/30 font-display text-xs font-bold uppercase tracking-wider mb-4">
-                      <Sparkles size={13} />
-                      {activePlaylist.year} Official Playlist
-                    </div>
-
-                    <h3 className="font-serif text-2xl sm:text-3xl font-medium text-white mb-3 leading-snug">
-                      {activePlaylist.title}
-                    </h3>
-
-                    {activePlaylist.description && (
-                      <p className="text-white/75 text-sm sm:text-base leading-relaxed mb-6">
-                        {activePlaylist.description}
-                      </p>
-                    )}
-
-                    <div className="flex flex-wrap gap-3 pt-2 border-t border-white/10">
+              {/* Main Theater Stage */}
+              <div className="grid lg:grid-cols-12 gap-0">
+                {/* 16:9 Embedded YouTube Playlist Player */}
+                <div className="lg:col-span-8 bg-black aspect-video relative w-full flex items-center justify-center">
+                  {embedUrl ? (
+                    <iframe
+                      src={embedUrl}
+                      title={activePlaylist.title}
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="p-8 text-center text-white">
+                      <PlayCircle size={56} className="text-white/40 mx-auto mb-3" />
+                      <p className="text-sm text-white/80 mb-4">Click below to open this playlist on YouTube</p>
                       <a
                         href={watchUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="press inline-flex items-center gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-xs sm:text-sm tracking-wide px-5 py-3 rounded-full hover:bg-red-700 transition-all shadow-lg"
+                        className="inline-flex items-center gap-2 bg-[var(--color-brand-red)] text-white px-5 py-2.5 rounded-full text-xs font-display font-semibold"
                       >
-                        <PlayCircle size={16} /> Open in YouTube <ExternalLink size={14} />
+                        Open on YouTube <ExternalLink size={14} />
                       </a>
                     </div>
-                  </div>
+                  )}
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
 
-          {/* Quick Browse All Playlists Bento Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {playlists.map((pl, idx) => {
-              const isSelected = idx === selectedPlaylistIndex
-              const plWatch = getPlaylistWatchUrl(pl.url)
-              return (
-                <div
-                  key={`${pl.year}-${pl.title}-${idx}`}
-                  onClick={() => setSelectedPlaylistIndex(idx)}
-                  className={`group relative rounded-2xl overflow-hidden border p-5 sm:p-6 transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-white border-[var(--color-brand-red)] shadow-lg ring-2 ring-[var(--color-brand-red)]/20'
-                      : 'bg-white border-stone-200/80 hover:border-stone-300 hover:shadow-md'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-display font-bold text-xs px-3 py-1 rounded-full bg-stone-100 text-stone-700 uppercase tracking-wider">
-                      {pl.year}
-                    </span>
+                {/* Playlist Info Panel */}
+                <div className="lg:col-span-4 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-gradient-to-b from-white/[0.04] to-transparent text-white">
+                  <div>
+                    <div className="flex items-center gap-2 text-[var(--color-brand-red)] font-display text-xs font-bold uppercase tracking-wider mb-3">
+                      <Sparkles size={14} />
+                      Featured Playlist
+                    </div>
+
+                    <h3 className="font-serif text-2xl sm:text-3xl font-medium leading-snug mb-4">
+                      {activePlaylist.title}
+                    </h3>
+
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                      {activePlaylist.description ||
+                        'Watch all full-length messages, special conventions, and worship sessions recorded live at El Shaddai Worship Center.'}
+                    </p>
+                  </div>
+
+                  <div className="pt-6 border-t border-white/10 flex flex-col gap-3">
+                    <MagneticElement>
+                      <a
+                        href={watchUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="press w-full inline-flex items-center justify-center gap-2 bg-[var(--color-brand-red)] text-white font-display font-semibold text-xs sm:text-sm tracking-wide px-6 py-3.5 rounded-full hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg"
+                      >
+                        <Youtube size={17} /> Watch on YouTube <ExternalLink size={14} />
+                      </a>
+                    </MagneticElement>
+
                     <a
-                      href={plWatch}
+                      href={settingsData.youtube_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-stone-400 hover:text-[var(--color-brand-red)] transition-colors p-1"
-                      title="Open on YouTube"
+                      className="press w-full inline-flex items-center justify-center gap-1.5 text-xs text-white/60 hover:text-white font-display py-2 transition-colors"
                     >
-                      <ExternalLink size={16} />
+                      Visit Channel Homepage <ExternalLink size={12} />
                     </a>
                   </div>
-
-                  <h4 className="font-serif text-lg font-medium text-[var(--color-ink)] mb-2 group-hover:text-[var(--color-brand-red)] transition-colors">
-                    {pl.title}
-                  </h4>
-
-                  {pl.description && (
-                    <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed mb-4">
-                      {pl.description}
-                    </p>
-                  )}
-
-                  <div className="flex items-center gap-2 text-xs font-display font-semibold text-[var(--color-brand-red)]">
-                    <PlayCircle size={15} />
-                    {isSelected ? 'Currently Selected' : 'Click to Load Playlist'}
-                  </div>
                 </div>
-              )
-            })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ----------------------------------------------------------------- */}
+        {/* Browse All Playlists by Year                                      */}
+        {/* ----------------------------------------------------------------- */}
+        <section>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <ListVideo className="text-[var(--color-brand-red)]" size={20} />
+                <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-brand-red)] uppercase">
+                  COMPLETE ARCHIVE
+                </p>
+              </div>
+              <h3 className="font-serif text-2xl sm:text-4xl font-medium text-[var(--color-ink)]">
+                Browse Playlists by Year
+              </h3>
+            </div>
+
+            {/* Year Selector Tabs */}
+            {availableYears.length > 0 && (
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <button
+                  type="button"
+                  onClick={() => setSelectedYearFilter('All')}
+                  className={`press px-4 py-2 rounded-full font-display text-xs sm:text-sm font-semibold tracking-wide transition-all whitespace-nowrap ${
+                    selectedYearFilter === 'All'
+                      ? 'bg-[var(--color-slate-deep)] text-white shadow-md'
+                      : 'bg-white border border-stone-200 text-stone-600 hover:border-stone-300 hover:bg-stone-50'
+                  }`}
+                >
+                  All Years
+                </button>
+
+                {availableYears.map((yr) => {
+                  const isCurrent = selectedYearFilter === yr
+                  return (
+                    <button
+                      key={yr}
+                      type="button"
+                      onClick={() => setSelectedYearFilter(yr)}
+                      className={`press px-4 py-2 rounded-full font-display text-xs sm:text-sm font-semibold tracking-wide transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                        isCurrent
+                          ? 'bg-[var(--color-brand-red)] text-white shadow-md'
+                          : 'bg-white border border-stone-200 text-stone-600 hover:border-stone-300 hover:bg-stone-50'
+                      }`}
+                    >
+                      <Calendar size={13} className={isCurrent ? 'text-white' : 'text-stone-400'} />
+                      {yr}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
-        </section>
-      )}
 
-      {/* ------------------------------------------------------------- */}
-      {/* 2. Recent Individual Sermon Highlights                        */}
-      {/* ------------------------------------------------------------- */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24 border-t border-stone-200/60">
-        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-          <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-brand-red)] section-eyebrow mb-2 uppercase">
-            INDIVIDUAL HIGHLIGHTS
-          </p>
-          <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
-            Recent Messages
-          </h2>
-          <p className="text-stone-600 text-sm mt-3">
-            Key sermon highlights, scriptures, and teachings from our head pastors and guest speakers.
-          </p>
-        </div>
+          {/* Playlist Cards Grid */}
+          {filteredPlaylists.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {filteredPlaylists.map((pl) => {
+                const originalIndex = playlists.indexOf(pl)
+                const isCurrentlyActive = originalIndex === activePlaylistIndex
+                const directWatchUrl = getPlaylistWatchUrl(pl.url)
 
-        <div className="grid sm:grid-cols-2 gap-5 sm:gap-7">
-          {SERMONS.map((s, i) => (
-            <motion.div
-              key={`${s.title}-${s.date}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="w-full h-full"
-            >
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block h-full"
+                return (
+                  <motion.div
+                    key={`${pl.year}-${pl.title}-${originalIndex}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                    className="h-full"
+                  >
+                    <TiltCard
+                      className={`group relative rounded-2xl overflow-hidden border bg-white shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full ${
+                        isCurrentlyActive
+                          ? 'border-[var(--color-brand-red)] ring-2 ring-[var(--color-brand-red)]/20'
+                          : 'border-stone-100'
+                      }`}
+                    >
+                      {/* Card Thumbnail / Header */}
+                      <div className="relative aspect-[16/10] bg-stone-900 overflow-hidden">
+                        <FallbackImage
+                          src={pl.thumb || '/sermons/sermon-1.jpg'}
+                          alt={pl.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
+
+                        {/* Year Badge */}
+                        <span className="absolute top-3.5 left-3.5 bg-[var(--color-brand-red)] text-white text-xs font-display font-bold px-3 py-1 rounded-full shadow-md tracking-wide">
+                          {pl.year}
+                        </span>
+
+                        {/* Series Tag */}
+                        <span className="absolute top-3.5 right-3.5 bg-black/50 backdrop-blur-md text-white/90 text-[11px] font-display font-medium px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1">
+                          <ListVideo size={12} /> Playlist
+                        </span>
+
+                        {/* Play Action Trigger */}
+                        <div
+                          onClick={() => handleSelectPlaylist(originalIndex, true)}
+                          className="absolute inset-0 flex items-center justify-center cursor-pointer group-hover:bg-black/10 transition-colors"
+                        >
+                          <div className="w-14 h-14 rounded-full bg-white/90 text-[var(--color-brand-red)] flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:bg-[var(--color-brand-red)] group-hover:text-white">
+                            <PlayCircle size={32} />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Card Details */}
+                      <div className="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h4 className="font-serif text-xl font-medium text-[var(--color-ink)] mb-2 group-hover:text-[var(--color-brand-red)] transition-colors leading-snug">
+                            {pl.title}
+                          </h4>
+
+                          {pl.description && (
+                            <p className="text-xs sm:text-sm text-stone-500 line-clamp-3 leading-relaxed mb-4">
+                              {pl.description}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="pt-4 border-t border-stone-100 flex items-center justify-between gap-3 mt-4">
+                          <button
+                            type="button"
+                            onClick={() => handleSelectPlaylist(originalIndex, true)}
+                            className={`press inline-flex items-center gap-1.5 text-xs font-display font-semibold transition-colors ${
+                              isCurrentlyActive
+                                ? 'text-[var(--color-brand-red)] font-bold'
+                                : 'text-stone-700 hover:text-[var(--color-brand-red)]'
+                            }`}
+                          >
+                            {isCurrentlyActive ? (
+                              <>
+                                <Check size={14} className="text-[var(--color-brand-red)]" /> Playing in Theater
+                              </>
+                            ) : (
+                              <>
+                                <PlayCircle size={15} /> Play in Theater
+                              </>
+                            )}
+                          </button>
+
+                          <a
+                            href={directWatchUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-stone-400 hover:text-[var(--color-brand-red)] text-xs font-display font-medium inline-flex items-center gap-1 transition-colors"
+                            title="Open on YouTube"
+                          >
+                            YouTube <ExternalLink size={12} />
+                          </a>
+                        </div>
+                      </div>
+                    </TiltCard>
+                  </motion.div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="bg-stone-50 border border-stone-200 rounded-2xl p-12 text-center max-w-lg mx-auto">
+              <ListVideo className="text-stone-400 mx-auto mb-3" size={40} />
+              <h4 className="font-serif text-xl text-[var(--color-ink)] mb-1">No Playlists Found</h4>
+              <p className="text-sm text-stone-500 mb-6">
+                No playlists are currently listed for year {selectedYearFilter}.
+              </p>
+              <button
+                type="button"
+                onClick={() => setSelectedYearFilter('All')}
+                className="press bg-[var(--color-slate-deep)] text-white text-xs font-display font-semibold px-5 py-2.5 rounded-full"
               >
-                <TiltCard className="group rounded-2xl overflow-hidden border border-stone-100 shadow-sm bg-white cursor-pointer h-full">
-                  <div className="relative aspect-video bg-stone-200 overflow-hidden">
-                    <FallbackImage
-                      src={s.thumb}
-                      alt={s.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
-                      <PlayCircle
-                        className="text-white drop-shadow-lg transition-transform duration-300 group-hover:scale-110"
-                        size={56}
-                        strokeWidth={1.4}
-                      />
-                    </div>
-                    {s.scripture && (
-                      <span className="absolute top-3 left-3 bg-[var(--color-brand-red)] text-white text-xs font-display font-semibold px-2.5 py-1 rounded-full shadow">
-                        {s.scripture}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-5 sm:p-6">
-                    <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-1.5 group-hover:text-[var(--color-brand-red)] transition-colors">
-                      {s.title}
-                    </h3>
-                    <p className="text-sm text-stone-500">
-                      {s.speaker} &middot; {formatDate(s.date)}
-                    </p>
-                  </div>
-                </TiltCard>
-              </a>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+                Show All Years
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* ----------------------------------------------------------------- */}
+        {/* YouTube Channel Subscription Banner                               */}
+        {/* ----------------------------------------------------------------- */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-20 sm:mt-28 rounded-3xl bg-gradient-to-r from-[var(--color-slate-deep)] via-[#221811] to-[var(--color-slate-deep)] p-8 sm:p-12 text-white border border-white/10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
+        >
+          <div className="flex flex-col md:flex-row items-center gap-5">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--color-brand-red)] text-white flex items-center justify-center shrink-0 shadow-lg">
+              <Youtube size={36} />
+            </div>
+            <div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-medium mb-1.5">
+                Subscribe on YouTube
+              </h3>
+              <p className="text-white/70 text-sm max-w-md">
+                Join our online worship family. Get notified whenever new Sunday services, sermons, and live streams are published.
+              </p>
+            </div>
+          </div>
+
+          <MagneticElement>
+            <a
+              href={settingsData.youtube_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="press shrink-0 inline-flex items-center gap-2 bg-white text-[var(--color-ink)] font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-stone-100 hover:-translate-y-0.5 transition-all shadow-lg"
+            >
+              Subscribe to Channel <ExternalLink size={15} />
+            </a>
+          </MagneticElement>
+        </motion.div>
+      </div>
     </motion.div>
   )
 }
