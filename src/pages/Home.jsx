@@ -253,6 +253,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Upcoming Events — placed above the services section */}
+      {eventsData.events.length > 0 && (
+        <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pb-20 sm:pb-28">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
+            <div>
+              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-royal)] section-eyebrow mb-2 uppercase">
+                GATHER WITH US
+              </p>
+              <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">
+                Upcoming Events
+              </h2>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {eventsData.events.map((event, i) => (
+              <motion.div
+                key={event.title + event.date}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="w-full h-full"
+              >
+                <TiltCard className="group rounded-2xl border border-stone-100 shadow-sm bg-white overflow-hidden cursor-default h-full">
+                  {event.image && (
+                    <div className="relative overflow-hidden aspect-video bg-stone-100">
+                      <FallbackImage
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <div className="inline-block bg-[var(--color-royal)]/10 text-[var(--color-royal)] text-xs font-display font-semibold px-3 py-1 rounded-full mb-3">
+                      {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {event.time ? ` · ${event.time}` : ''}
+                    </div>
+                    <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-2">{event.title}</h3>
+                    {event.description && <p className="text-sm text-stone-500 leading-relaxed">{event.description}</p>}
+                  </div>
+                </TiltCard>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Schedule preview section — redesigned based on the user's reference image */}
       <section
         id="schedule"
@@ -317,49 +366,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-
-      {eventsData.events.length > 0 && (
-        <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <h2 className="font-serif text-3xl md:text-5xl font-medium text-[var(--color-ink)]">Upcoming Events</h2>
-            </div>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eventsData.events.map((event, i) => (
-              <motion.div
-                key={event.title + event.date}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="w-full h-full"
-              >
-                <TiltCard className="group rounded-2xl border border-stone-100 shadow-sm bg-white overflow-hidden cursor-default h-full">
-                  {event.image && (
-                    <div className="relative overflow-hidden aspect-video bg-stone-100">
-                      <FallbackImage
-                        src={event.image}
-                        alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <div className="inline-block bg-[var(--color-royal)]/10 text-[var(--color-royal)] text-xs font-display font-semibold px-3 py-1 rounded-full mb-3">
-                      {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      {event.time ? ` · ${event.time}` : ''}
-                    </div>
-                    <h3 className="font-display text-lg font-bold text-[var(--color-slate-deep)] mb-2">{event.title}</h3>
-                    {event.description && <p className="text-sm text-stone-500 leading-relaxed">{event.description}</p>}
-                  </div>
-                </TiltCard>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Glimpses — a continuous scrolling photo strip that auto-plays and
           pauses on hover, giving the page a sense of motion and life. */}

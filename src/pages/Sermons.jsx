@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { PlayCircle, ExternalLink, ListVideo, Calendar, Sparkles, Youtube, Check } from 'lucide-react'
+import { PlayCircle, ExternalLink, ListVideo, Calendar, Youtube } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import FallbackImage from '../components/FallbackImage'
 import Seo from '../components/Seo'
@@ -53,31 +53,12 @@ export default function Sermons() {
       <PageHeader eyebrow="WATCH & LISTEN" title="Sermons & Media" image={pageHeaders.sermons} />
 
       {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">
-        {/* Intro Scripture Banner */}
-        <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
-          <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-brand-red)] section-eyebrow mb-3 uppercase">
-            THE WORD OF GOD
-          </p>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-ink)] leading-tight">
-            Faith Comes by Hearing
-          </h2>
-          <p className="font-serif italic text-stone-600 text-base sm:text-lg mt-4 leading-relaxed">
-            &ldquo;So faith comes from hearing, and hearing through the word of Christ.&rdquo;
-            <span className="block not-italic font-display text-xs font-semibold uppercase tracking-widest text-stone-400 mt-1.5">
-              Romans 10:17
-            </span>
-          </p>
-          <p className="text-stone-500 text-sm mt-5 leading-relaxed max-w-xl mx-auto">
-            Browse our full video sermon archives. Select a year below to stream complete worship services, powerful preaching, and convention messages directly from our YouTube channel.
-          </p>
-        </div>
-
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-12 sm:py-16">
         {/* ----------------------------------------------------------------- */}
         {/* Theater Player Showcase                                           */}
         {/* ----------------------------------------------------------------- */}
         {activePlaylist && (
-          <section ref={playerRef} className="scroll-mt-28 mb-20 sm:mb-28">
+          <section ref={playerRef} className="scroll-mt-28 mb-16 sm:mb-24">
             <div className="relative rounded-3xl bg-[var(--color-slate-deep)] border border-white/10 shadow-2xl shadow-black/40 overflow-hidden">
               {/* Theater Top Bar */}
               <div className="flex flex-wrap items-center justify-between gap-3 px-5 sm:px-8 py-3.5 bg-white/[0.03] border-b border-white/10 text-xs font-display">
@@ -127,11 +108,6 @@ export default function Sermons() {
                 {/* Playlist Info Panel */}
                 <div className="lg:col-span-4 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-gradient-to-b from-white/[0.04] to-transparent text-white">
                   <div>
-                    <div className="flex items-center gap-2 text-[var(--color-brand-red)] font-display text-xs font-bold uppercase tracking-wider mb-3">
-                      <Sparkles size={14} />
-                      Featured Playlist
-                    </div>
-
                     <h3 className="font-serif text-2xl sm:text-3xl font-medium leading-snug mb-4">
                       {activePlaylist.title}
                     </h3>
@@ -248,7 +224,10 @@ export default function Sermons() {
                       }`}
                     >
                       {/* Card Thumbnail / Header */}
-                      <div className="relative aspect-[16/10] bg-stone-900 overflow-hidden">
+                      <div
+                        onClick={() => handleSelectPlaylist(originalIndex, true)}
+                        className="relative aspect-[16/10] bg-stone-900 overflow-hidden cursor-pointer"
+                      >
                         <FallbackImage
                           src={pl.thumb || '/sermons/sermon-1.jpg'}
                           alt={pl.title}
@@ -267,10 +246,7 @@ export default function Sermons() {
                         </span>
 
                         {/* Play Action Trigger */}
-                        <div
-                          onClick={() => handleSelectPlaylist(originalIndex, true)}
-                          className="absolute inset-0 flex items-center justify-center cursor-pointer group-hover:bg-black/10 transition-colors"
-                        >
+                        <div className="absolute inset-0 flex items-center justify-center group-hover:bg-black/10 transition-colors">
                           <div className="w-14 h-14 rounded-full bg-white/90 text-[var(--color-brand-red)] flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:bg-[var(--color-brand-red)] group-hover:text-white">
                             <PlayCircle size={32} />
                           </div>
@@ -280,7 +256,10 @@ export default function Sermons() {
                       {/* Card Details */}
                       <div className="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                          <h4 className="font-serif text-xl font-medium text-[var(--color-ink)] mb-2 group-hover:text-[var(--color-brand-red)] transition-colors leading-snug">
+                          <h4
+                            onClick={() => handleSelectPlaylist(originalIndex, true)}
+                            className="font-serif text-xl font-medium text-[var(--color-ink)] mb-2 group-hover:text-[var(--color-brand-red)] transition-colors leading-snug cursor-pointer"
+                          >
                             {pl.title}
                           </h4>
 
@@ -292,34 +271,18 @@ export default function Sermons() {
                         </div>
 
                         <div className="pt-4 border-t border-stone-100 flex items-center justify-between gap-3 mt-4">
-                          <button
-                            type="button"
-                            onClick={() => handleSelectPlaylist(originalIndex, true)}
-                            className={`press inline-flex items-center gap-1.5 text-xs font-display font-semibold transition-colors ${
-                              isCurrentlyActive
-                                ? 'text-[var(--color-brand-red)] font-bold'
-                                : 'text-stone-700 hover:text-[var(--color-brand-red)]'
-                            }`}
-                          >
-                            {isCurrentlyActive ? (
-                              <>
-                                <Check size={14} className="text-[var(--color-brand-red)]" /> Playing in Theater
-                              </>
-                            ) : (
-                              <>
-                                <PlayCircle size={15} /> Play in Theater
-                              </>
-                            )}
-                          </button>
+                          <span className="text-xs font-display font-medium text-stone-400">
+                            {pl.year} Series
+                          </span>
 
                           <a
                             href={directWatchUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-stone-400 hover:text-[var(--color-brand-red)] text-xs font-display font-medium inline-flex items-center gap-1 transition-colors"
+                            className="press text-stone-700 hover:text-[var(--color-brand-red)] text-xs font-display font-semibold inline-flex items-center gap-1.5 transition-colors"
                             title="Open on YouTube"
                           >
-                            YouTube <ExternalLink size={12} />
+                            Watch on YouTube <ExternalLink size={13} />
                           </a>
                         </div>
                       </div>
