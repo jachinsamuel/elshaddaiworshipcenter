@@ -2,17 +2,31 @@
   "playlists": [
     {
       "year": "2026",
-      "title": "2026 Sunday Messages & Worship",
-      "url": "https://youtube.com/playlist?list=PLwzx_RhdN0riB46qqKQV4F-9mU7quEm8y&si=isoakLWaDk5D2phQ",
-      "description": "Full collection of Sunday morning worship services, anointed sermons, and special conventions from 2026.",
+      "title": "Sunday Service 2026",
+      "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0riB46qqKQV4F-9mU7quEm8y",
+      "description": "Full worship services, messages, and Sunday gatherings from 2026.",
       "thumb": "/sermons/sermon-1.jpg"
     },
     {
+      "year": "2026",
+      "title": "Friday Fasting Prayer 2026",
+      "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rhLKvSrWsBhZuNWGZIlQWfB",
+      "description": "Weekly Friday fasting prayer sessions, intercession, and teachings from 2026.",
+      "thumb": "/sermons/sermon-3.jpg"
+    },
+    {
       "year": "2025",
-      "title": "2025 Sunday Messages & Worship",
-      "url": "https://www.youtube.com/playlist?list=PLrAXtmErZgOfZ_8GztsuKi9up8y_BQ46e",
-      "description": "Rewatch every sermon, worship night, and life-changing message from 2025.",
+      "title": "Sunday Service 2025",
+      "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rgz64ArtKXuHhFm29uY6EnF",
+      "description": "Complete collection of Sunday morning worship services and anointed sermons from 2025.",
       "thumb": "/sermons/sermon-2.jpg"
+    },
+    {
+      "year": "2025",
+      "title": "Friday Fasting Prayer 2025",
+      "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rhFs-BmzLadcXyC0wTGh1dE",
+      "description": "Powerful fasting and prayer meetings recorded throughout 2025.",
+      "thumb": "/sermons/sermon-4.jpg"
     }
   ]
 }
