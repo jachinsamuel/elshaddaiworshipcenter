@@ -11,19 +11,33 @@ const whatsappMessage = encodeURIComponent("Hi, I'd like to know more about El S
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsSubmitting(true)
     const form = e.target
+    const formData = new FormData(form)
+
     try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString(),
-      })
+      if (contactData.google_sheet_url) {
+        await fetch(contactData.google_sheet_url, {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors',
+        })
+      } else {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString(),
+        })
+      }
       setSent(true)
     } catch {
       setSent(true)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -46,8 +60,16 @@ export default function Contact() {
             <p className="text-sm text-stone-500 mb-7">We would love to hear from you.</p>
 
             {sent ? (
-              <div className="bg-blue-50 border border-blue-100 text-[var(--color-royal-dark)] rounded-xl p-6 text-sm">
-                Thank you, your message has been received. We'll be in touch soon.
+              <div className="bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-xl p-6 text-sm">
+                <p className="font-semibold mb-1">Thank you! Your message has been received.</p>
+                <p className="text-emerald-700/90 text-xs">We will get back to you soon.</p>
+                <button
+                  type="button"
+                  onClick={() => setSent(false)}
+                  className="mt-4 text-xs font-semibold text-emerald-800 underline hover:no-underline"
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
               <form name="contact" onSubmit={handleSubmit} data-netlify="true" className="grid gap-5">
@@ -78,9 +100,11 @@ export default function Contact() {
                 </div>
                 <button
                   type="submit"
-                  className="press group inline-flex items-center justify-center gap-2 bg-[var(--color-royal)] text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-[var(--color-royal-dark)] hover:-translate-y-0.5 transition-all"
+                  disabled={isSubmitting}
+                  className="press group inline-flex items-center justify-center gap-2 bg-[var(--color-royal)] text-white font-display font-semibold text-sm tracking-wide px-7 py-3.5 rounded-full hover:bg-[var(--color-royal-dark)] hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  Send Message <Send size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  {isSubmitting ? 'Sending Message...' : 'Send Message'}
+                  <Send size={16} className={`transition-transform ${isSubmitting ? 'animate-pulse' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`} />
                 </button>
               </form>
             )}
