@@ -1,3 +1,11 @@
 {
-  "events": []
+  "events": [
+    {
+      "title": "family camp",
+      "date": "1906-11-15",
+      "time": "10 to 12",
+      "description": "family camp in elshaddai",
+      "image": "/images/uploads/screenshot-2026-10-01-144457.png"
+    }
+  ]
 }
