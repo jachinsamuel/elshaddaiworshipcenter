@@ -207,6 +207,26 @@ collections:
       - { label: "YouTube Link", name: "url", widget: "string" }
 
   # ---------------------------------------------------------------------
+  - name: "playlists"
+    label: "Sermon Playlists"
+    files:
+      - name: "playlists"
+        label: "YouTube Playlists (By Year)"
+        file: "src/content/playlists.json"
+        fields:
+          - label: "Playlists by Year"
+            name: "playlists"
+            widget: "list"
+            summary: "{{fields.year}} — {{fields.title}}"
+            hint: "Add YouTube playlists organized by year (e.g. 2026, 2025). These appear on the Sermons page with full video embeds and year selectors."
+            fields:
+              - { label: "Year", name: "year", widget: "string", hint: "e.g. 2026, 2025" }
+              - { label: "Playlist Title", name: "title", widget: "string", hint: "e.g. 2026 Sunday Messages & Worship" }
+              - { label: "YouTube Playlist URL", name: "url", widget: "string", hint: "Full YouTube playlist link, e.g. https://www.youtube.com/playlist?list=PL..." }
+              - { label: "Description (optional)", name: "description", widget: "text", required: false, hint: "Brief summary of this year's message series" }
+              - { label: "Cover Image / Thumbnail (optional)", name: "thumb", widget: "image", required: false, hint: "Optional cover picture for the playlist card" }
+
+  # ---------------------------------------------------------------------
   - name: "events"
     label: "Upcoming Events"
     files:
