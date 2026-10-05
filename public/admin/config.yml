@@ -157,6 +157,7 @@ collections:
         label: "Services"
         file: "src/content/services.json"
         fields:
+          - { label: "Homepage Schedule Background Photo", name: "background_image", widget: "image", required: false, hint: "Background image behind the 'Our Services' card on the homepage." }
           - label: "Services"
             name: "services"
             widget: "list"

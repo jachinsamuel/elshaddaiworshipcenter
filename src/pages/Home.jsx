@@ -10,6 +10,7 @@ import { getVideoEmbedUrl } from '../lib/youtube'
 import settingsData from '../content/settings.json'
 import leadersData from '../content/leaders.json'
 import aboutContent from '../content/about-content.json'
+import servicesData from '../content/services.json'
 import glimpsesData from '../content/glimpses.json'
 import eventsData from '../content/events.json'
 import TiltCard from '../components/TiltCard'
@@ -378,69 +379,76 @@ export default function Home() {
       )}
 
       {/* Schedule preview section — redesigned based on the user's reference image */}
-      <section
-        id="schedule"
-        className="relative py-20 sm:py-28 overflow-hidden bg-cover bg-center text-white"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(10,10,12,0.85), rgba(10,10,12,0.85)), url(${aboutContent.sanctuary_image})`,
-        }}
-      >
-        <div className="grain absolute inset-0 opacity-[0.03]" />
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-14 shadow-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+      {(() => {
+        const scheduleBg = servicesData.background_image || aboutContent.sanctuary_image || ''
+        return (
+          <section
+            id="schedule"
+            className="relative py-20 sm:py-28 overflow-hidden bg-cover bg-center text-white bg-stone-950"
+            style={{
+              backgroundImage: scheduleBg
+                ? `linear-gradient(to bottom, rgba(10,10,12,0.85), rgba(10,10,12,0.85)), url(${scheduleBg})`
+                : undefined,
+            }}
           >
-            {/* Header: Our Services */}
-            <div className="flex flex-col items-center mb-8 sm:mb-10">
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white uppercase select-none">
-                Our Services
-              </h2>
-              <div className="w-20 h-1 bg-[var(--color-brand-red)] mt-4 rounded-full" />
-            </div>
+            <div className="grain absolute inset-0 opacity-[0.03]" />
+            
+            <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-14 shadow-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+              >
+                {/* Header: Our Services */}
+                <div className="flex flex-col items-center mb-8 sm:mb-10">
+                  <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white uppercase select-none">
+                    Our Services
+                  </h2>
+                  <div className="w-20 h-1 bg-[var(--color-brand-red)] mt-4 rounded-full" />
+                </div>
 
-            {/* Services List */}
-            <div className="flex flex-col gap-6 text-base md:text-lg text-white/90 max-w-2xl mx-auto font-display mb-10">
-              {SCHEDULE.map((s, i) => (
+                {/* Services List */}
+                <div className="flex flex-col gap-6 text-base md:text-lg text-white/90 max-w-2xl mx-auto font-display mb-10">
+                  {SCHEDULE.map((s, i) => (
+                    <motion.div
+                      key={s.id}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.08 }}
+                      className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 leading-relaxed border-b border-white/[0.04] pb-4 last:border-b-0 last:pb-0"
+                    >
+                      <span className="font-bold text-white tracking-wide">{s.title}:</span>
+                      <span className="text-white/80">{s.timeLabel}</span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Click Here Link */}
                 <motion.div
-                  key={s.id}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 leading-relaxed border-b border-white/[0.04] pb-4 last:border-b-0 last:pb-0"
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="text-white/80 text-sm md:text-base font-display font-medium pt-6 border-t border-white/10"
                 >
-                  <span className="font-bold text-white tracking-wide">{s.title}:</span>
-                  <span className="text-white/80">{s.timeLabel}</span>
+                  Know More About the Other Services{' '}
+                  <MagneticElement className="ml-1 inline-block vertical-align-middle">
+                    <Link
+                      to="/services"
+                      className="press inline-flex items-center gap-1 font-bold text-[var(--color-brand-red)] hover:text-red-500 transition-colors uppercase"
+                    >
+                      Click Here &gt;&gt;
+                    </Link>
+                  </MagneticElement>
                 </motion.div>
-              ))}
+              </motion.div>
             </div>
-
-            {/* Click Here Link */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-white/80 text-sm md:text-base font-display font-medium pt-6 border-t border-white/10"
-            >
-              Know More About the Other Services{' '}
-              <MagneticElement className="ml-1 inline-block vertical-align-middle">
-                <Link
-                  to="/services"
-                  className="press inline-flex items-center gap-1 font-bold text-[var(--color-brand-red)] hover:text-red-500 transition-colors uppercase"
-                >
-                  Click Here &gt;&gt;
-                </Link>
-              </MagneticElement>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+          </section>
+        )
+      })()}
 
       {/* Glimpses — a continuous scrolling photo strip that auto-plays and
           pauses on hover, giving the page a sense of motion and life. */}
