@@ -43,7 +43,11 @@ export default function Contact() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-      <Seo title="Contact Us" description="Get in touch with El Shaddai Worship Center, Nagercoil. Visit us, call, message on WhatsApp, or send a message directly." />
+      <Seo
+        title="Contact Us & Prayer Requests"
+        description="Connect with El Shaddai Worship Center, Nagercoil. Location: Subash St, Krishnankovil. Phone: +91 9443581257. Send a prayer request or join our WhatsApp fellowship."
+        path="/contact"
+      />
       <PageHeader eyebrow="REACH OUT" title="Contact Us" image={pageHeaders.contact} />
 
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-24">

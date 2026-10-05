@@ -12,7 +12,11 @@ const MINISTRIES = ministriesData.ministries
 export default function Ministries() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-      <Seo title="Ministries" description="Youth Fellowship, Sunday School, and Women's Ministry. Find your place to grow and serve at El Shaddai Worship Center." />
+      <Seo
+        title="Ministries & Fellowship"
+        description="Explore ministries at El Shaddai Worship Center, Nagercoil: Youth Fellowship, Sunday School, Men's Ministry, and Women's Fellowship. Grow and serve together."
+        path="/ministries"
+      />
       <PageHeader eyebrow="GET INVOLVED" title="Ministries" image={pageHeaders.ministries} />
 
       <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">

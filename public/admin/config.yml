@@ -26,6 +26,7 @@ collections:
           - { label: "Footer Logo", name: "footer_logo", widget: "image" }
           - { label: "Hero Video (homepage background)", name: "hero_video", widget: "file", hint: "MP4 file, plays muted and looped behind the homepage title." }
           - { label: "YouTube Channel ID", name: "youtube_channel_id", widget: "string", hint: "Starts with UC... Find it under YouTube Studio > Settings > Channel > Advanced settings. Used to auto-embed the live stream during service hours." }
+          - { label: "Specific Live Stream URL / Video ID (Optional)", name: "live_stream_url", widget: "string", required: false, hint: "Paste a specific YouTube Live URL or video ID when streaming if you want to override the automatic channel embed." }
           - { label: "YouTube Channel URL (Watch Live button)", name: "youtube_watch_url", widget: "string" }
           - { label: "Facebook URL", name: "facebook_url", widget: "string" }
           - { label: "Instagram URL", name: "instagram_url", widget: "string" }
@@ -150,7 +151,7 @@ collections:
 
   # ---------------------------------------------------------------------
   - name: "services"
-    label: "Weekly Service Schedule"
+    label: "Services (Schedule)"
     files:
       - name: "services"
         label: "Services"
@@ -192,20 +193,6 @@ collections:
               - { label: "Photo", name: "image", widget: "image" }
               - { label: "Button / Status Label Text", name: "cta_text", widget: "string", required: false, hint: "e.g., 'Coming Soon', 'Join Group', 'Register'. Defaults to 'Coming Soon'." }
               - { label: "Button Link URL (optional)", name: "cta_link", widget: "string", required: false, hint: "e.g., a WhatsApp link, a Google form URL, or a subpage like /contact. If left blank, it stays as a static label." }
-
-  # ---------------------------------------------------------------------
-  - name: "sermons"
-    label: "Sermons"
-    folder: "src/content/sermons"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Scripture Reference", name: "scripture", widget: "string", hint: "e.g. Luke 1:30" }
-      - { label: "Speaker", name: "speaker", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Thumbnail", name: "thumb", widget: "image" }
-      - { label: "YouTube Link", name: "url", widget: "string" }
 
   # ---------------------------------------------------------------------
   - name: "playlists"

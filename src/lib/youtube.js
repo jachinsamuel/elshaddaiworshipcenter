@@ -55,3 +55,25 @@ export function getPlaylistWatchUrl(urlOrId) {
 
   return trimmed.startsWith('http') ? trimmed : `https://${trimmed}`
 }
+
+/**
+ * Normalizes a single video link or live stream link into a YouTube embed URL.
+ */
+export function getVideoEmbedUrl(urlOrId) {
+  if (!urlOrId || typeof urlOrId !== 'string') return null
+  const trimmed = urlOrId.trim()
+  if (trimmed.includes('youtube.com/embed/') || trimmed.includes('youtube-nocookie.com/embed/')) {
+    return trimmed
+  }
+
+  const idMatch = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|live\/))([\w-]{11})/)
+  if (idMatch) {
+    return `https://www.youtube-nocookie.com/embed/${idMatch[1]}?autoplay=1`
+  }
+
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+    return `https://www.youtube-nocookie.com/embed/${trimmed}?autoplay=1`
+  }
+
+  return null
+}

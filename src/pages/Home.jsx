@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { PlayCircle, ArrowRight } from 'lucide-react'
+import { PlayCircle, ArrowRight, ExternalLink } from 'lucide-react'
 import RidgeDivider from '../components/RidgeDivider'
 import Seo from '../components/Seo'
 import FallbackImage from '../components/FallbackImage'
 import { getLiveService, SCHEDULE } from '../lib/schedule'
+import { getVideoEmbedUrl } from '../lib/youtube'
 import settingsData from '../content/settings.json'
 import leadersData from '../content/leaders.json'
 import aboutContent from '../content/about-content.json'
@@ -35,7 +36,8 @@ export default function Home() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
       <Seo
         title="Home"
-        description="El Shaddai Worship Center, Nagercoil, a family of faith rooted in apostolic truth and Holy Ghost power. Join us for worship, watch live, and find your place to belong."
+        description="Welcome to El Shaddai Worship Center in Nagercoil, Tamil Nadu. Join our church family for Sunday worship services, Friday fasting prayer, and live sermons with Pr. S. John Jeyakumar."
+        path="/"
       />
       {/* Hero — raw video, no overlays. Asymmetric serif headline with a
           hand-drawn underline stroke as the page's signature mark, and a
@@ -126,33 +128,65 @@ export default function Home() {
       </section>
 
       {/* Watch Live - warm cinematic section, only visible during scheduled services */}
-      {liveService && (
-        <section id="live-now" className="relative bg-[var(--color-parchment)] py-20 overflow-hidden">
-          <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
-            <div className="flex items-center gap-3 justify-center mb-8">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
-              </span>
-              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-ink)] section-eyebrow">
-                LIVE NOW | {liveService.title.toUpperCase()}
-              </p>
+      {liveService && (() => {
+        const liveEmbedUrl = settingsData.live_stream_url
+          ? getVideoEmbedUrl(settingsData.live_stream_url)
+          : YOUTUBE_CHANNEL_ID
+            ? `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0`
+            : null
+
+        const directWatchUrl = settingsData.youtube_watch_url || 'https://www.youtube.com/@elshaddaiworshipcenter/live'
+
+        return (
+          <section id="live-now" className="relative bg-[var(--color-parchment)] py-20 overflow-hidden">
+            <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
+              <div className="flex items-center gap-3 justify-center mb-8">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
+                </span>
+                <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-ink)] section-eyebrow">
+                  LIVE NOW | {liveService.title.toUpperCase()}
+                </p>
+              </div>
+
+              <div className="aspect-video rounded-2xl overflow-hidden border border-stone-300 shadow-xl bg-black relative">
+                {liveEmbedUrl ? (
+                  <iframe
+                    className="w-full h-full border-0"
+                    src={liveEmbedUrl}
+                    title="Live service stream"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-white">
+                    <PlayCircle size={48} className="text-[var(--color-brand-red)] mb-3" />
+                    <p className="font-display font-semibold text-lg mb-2">Live Service in Progress</p>
+                    <p className="text-sm text-stone-300 max-w-md mb-4">
+                      Watch the live broadcast directly on our YouTube channel.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-6">
+                <a
+                  href={directWatchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press inline-flex items-center gap-2 bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-display text-xs sm:text-sm font-semibold px-6 py-3 rounded-full shadow-lg transition-all"
+                >
+                  <PlayCircle size={17} /> Watch Live on YouTube <ExternalLink size={14} />
+                </a>
+                <span className="text-xs text-stone-500">
+                  Streaming live from Nagercoil Sanctuary
+                </span>
+              </div>
             </div>
-            <div className="aspect-video rounded-2xl overflow-hidden border border-stone-300 shadow-lg">
-              <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0`}
-                title="Live service stream"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <p className="text-center text-stone-500 text-sm mt-6">
-              Can't see the stream? <a href={settingsData.youtube_watch_url} target="_blank" rel="noopener noreferrer" className="text-[var(--color-royal)] hover:text-[var(--color-royal-dark)] transition-colors">Watch directly on YouTube</a>.
-            </p>
-          </div>
-        </section>
-      )}
+          </section>
+        )
+      })()}
       {/* About the church — brief intro with image, mirroring the reference
           site's homepage pattern. Full founding story stays on the About
           page; this is just enough to orient a first-time visitor. */}

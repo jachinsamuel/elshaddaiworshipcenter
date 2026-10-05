@@ -24,7 +24,11 @@ export default function Give() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-      <Seo title="Give" description="Support El Shaddai Worship Center through UPI or direct bank transfer. Tithes and offerings for the house of God." />
+      <Seo
+        title="Tithes & Offerings (Giving)"
+        description="Support the ministry and gospel mission of El Shaddai Worship Center, Nagercoil. Give tithes and offerings securely via UPI QR code, GPay, PhonePe, or bank transfer."
+        path="/give"
+      />
       <PageHeader eyebrow="TITHES & OFFERINGS" title="Give" image={pageHeaders.give} />
 
       <section className="max-w-5xl mx-auto px-6 lg:px-10 py-24">

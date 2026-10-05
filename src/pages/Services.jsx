@@ -11,7 +11,11 @@ export default function Services() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-      <Seo title="Services" description="Our full weekly worship schedule. Sunday services, Friday fasting prayer, and Saturday night worship at El Shaddai Worship Center, Nagercoil." />
+      <Seo
+        title="Worship Services & Schedule"
+        description="Join our weekly worship services in Nagercoil: Sunday 1st Service (6:00 AM), 2nd Service (10:00 AM), Friday Fasting Prayer (10:00 AM), and Saturday Worship."
+        path="/services"
+      />
       <PageHeader eyebrow="WEEKLY RHYTHM" title="Services" image={pageHeaders.services} />
 
       <section className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-10 py-16 sm:py-24">

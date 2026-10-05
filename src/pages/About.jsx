@@ -12,7 +12,11 @@ import pageHeaders from '../content/page-headers.json'
 export default function About() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-      <Seo title="About Us" description="Forty years of grace in Nagercoil. Meet the founder and leadership of El Shaddai Worship Center, and discover the apostolic truth we stand on." />
+      <Seo
+        title="About Us & Church History"
+        description="Over 40 years of ministry in Nagercoil. Discover the founding story, apostolic mission, and leadership of El Shaddai Worship Center under Head Pastor Pr. S. John Jeyakumar."
+        path="/about"
+      />
       <PageHeader eyebrow="FORTY YEARS OF GRACE" title="About Us" image={pageHeaders.about} />
 
       {/* Huge opening statement — the church's identity in one big serif

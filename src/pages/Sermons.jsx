@@ -48,7 +48,8 @@ export default function Sermons() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
       <Seo
         title="Sermons & YouTube Playlists"
-        description="Watch complete yearly sermon playlists, Sunday messages, and worship series from El Shaddai Worship Center, Nagercoil."
+        description="Watch anointed sermons, live Sunday messages, and yearly YouTube message playlists from El Shaddai Worship Center, Nagercoil."
+        path="/sermons"
       />
       <PageHeader eyebrow="WATCH & LISTEN" title="Sermons & Media" image={pageHeaders.sermons} />
 
@@ -229,7 +230,7 @@ export default function Sermons() {
                         className="relative aspect-[16/10] bg-stone-900 overflow-hidden cursor-pointer"
                       >
                         <FallbackImage
-                          src={pl.thumb || '/sermons/sermon-1.jpg'}
+                          src={pl.thumb || '/sermons/sunday-service-2026.jpg'}
                           alt={pl.title}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                         />
