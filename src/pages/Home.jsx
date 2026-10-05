@@ -26,11 +26,62 @@ const ABOUT_STATS = [
 
 export default function Home() {
   const [liveService, setLiveService] = useState(() => getLiveService())
+  const [youtubeLive, setYoutubeLive] = useState(null)
 
   useEffect(() => {
-    const interval = setInterval(() => setLiveService(getLiveService()), 60 * 1000)
-    return () => clearInterval(interval)
+    let isMounted = true
+
+    const checkLiveStream = async () => {
+      try {
+        const res = await fetch('/api/youtube-live')
+        if (res.ok) {
+          const data = await res.json()
+          if (isMounted) {
+            setYoutubeLive(data)
+          }
+        }
+      } catch {
+        // Fallback silently if offline or API unavailable
+      }
+    }
+
+    checkLiveStream()
+    const interval = setInterval(() => {
+      setLiveService(getLiveService())
+      checkLiveStream()
+    }, 45 * 1000)
+
+    return () => {
+      isMounted = false
+      clearInterval(interval)
+    }
   }, [])
+
+  const isChannelLive = youtubeLive?.isLive === true
+  const isManuallyLive = !!settingsData.live_stream_url
+  const isScheduledLive = !!liveService && youtubeLive?.isLive !== false
+
+  const activeLive = isChannelLive
+    ? {
+        title: youtubeLive.title || liveService?.title || 'Special Live Broadcast',
+        embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeLive.videoId}?autoplay=1`,
+        watchUrl: `https://www.youtube.com/watch?v=${youtubeLive.videoId}`,
+      }
+    : isManuallyLive
+      ? {
+          title: liveService?.title || 'Live Broadcast',
+          embedUrl: getVideoEmbedUrl(settingsData.live_stream_url),
+          watchUrl: settingsData.live_stream_url,
+        }
+      : isScheduledLive
+        ? {
+            title: liveService.title,
+            embedUrl: YOUTUBE_CHANNEL_ID
+              ? `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0`
+              : null,
+            watchUrl: settingsData.youtube_watch_url || 'https://www.youtube.com/@elshaddaiworshipcenter/live',
+          }
+        : null
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
@@ -127,66 +178,56 @@ export default function Home() {
         <RidgeDivider color="var(--color-parchment)" peakUp />
       </section>
 
-      {/* Watch Live - warm cinematic section, only visible during scheduled services */}
-      {liveService && (() => {
-        const liveEmbedUrl = settingsData.live_stream_url
-          ? getVideoEmbedUrl(settingsData.live_stream_url)
-          : YOUTUBE_CHANNEL_ID
-            ? `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0`
-            : null
-
-        const directWatchUrl = settingsData.youtube_watch_url || 'https://www.youtube.com/@elshaddaiworshipcenter/live'
-
-        return (
-          <section id="live-now" className="relative bg-[var(--color-parchment)] py-20 overflow-hidden">
-            <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
-              <div className="flex items-center gap-3 justify-center mb-8">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
-                </span>
-                <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-ink)] section-eyebrow">
-                  LIVE NOW | {liveService.title.toUpperCase()}
-                </p>
-              </div>
-
-              <div className="aspect-video rounded-2xl overflow-hidden border border-stone-300 shadow-xl bg-black relative">
-                {liveEmbedUrl ? (
-                  <iframe
-                    className="w-full h-full border-0"
-                    src={liveEmbedUrl}
-                    title="Live service stream"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-white">
-                    <PlayCircle size={48} className="text-[var(--color-brand-red)] mb-3" />
-                    <p className="font-display font-semibold text-lg mb-2">Live Service in Progress</p>
-                    <p className="text-sm text-stone-300 max-w-md mb-4">
-                      Watch the live broadcast directly on our YouTube channel.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-6">
-                <a
-                  href={directWatchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="press inline-flex items-center gap-2 bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-display text-xs sm:text-sm font-semibold px-6 py-3 rounded-full shadow-lg transition-all"
-                >
-                  <PlayCircle size={17} /> Watch Live on YouTube <ExternalLink size={14} />
-                </a>
-                <span className="text-xs text-stone-500">
-                  Streaming live from Nagercoil Sanctuary
-                </span>
-              </div>
+      {/* Watch Live - displays whenever YouTube channel is streaming live, or manual override is set */}
+      {activeLive && (
+        <section id="live-now" className="relative bg-[var(--color-parchment)] py-20 overflow-hidden">
+          <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
+            <div className="flex items-center gap-3 justify-center mb-8">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-brand-red)] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-brand-red)]" />
+              </span>
+              <p className="font-display text-xs font-semibold tracking-[0.25em] text-[var(--color-ink)] section-eyebrow">
+                LIVE NOW | {activeLive.title.toUpperCase()}
+              </p>
             </div>
-          </section>
-        )
-      })()}
+
+            <div className="aspect-video rounded-2xl overflow-hidden border border-stone-300 shadow-xl bg-black relative">
+              {activeLive.embedUrl ? (
+                <iframe
+                  className="w-full h-full border-0"
+                  src={activeLive.embedUrl}
+                  title={activeLive.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-white">
+                  <PlayCircle size={48} className="text-[var(--color-brand-red)] mb-3" />
+                  <p className="font-display font-semibold text-lg mb-2">Live Broadcast in Progress</p>
+                  <p className="text-sm text-stone-300 max-w-md mb-4">
+                    Watch the live broadcast directly on our YouTube channel.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-6">
+              <a
+                href={activeLive.watchUrl || 'https://www.youtube.com/@elshaddaiworshipcenter/live'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press inline-flex items-center gap-2 bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-display text-xs sm:text-sm font-semibold px-6 py-3 rounded-full shadow-lg transition-all"
+              >
+                <PlayCircle size={17} /> Watch Live on YouTube <ExternalLink size={14} />
+              </a>
+              <span className="text-xs text-stone-500">
+                Streaming live from Nagercoil Sanctuary
+              </span>
+            </div>
+          </div>
+        </section>
+      )}
       {/* About the church — brief intro with image, mirroring the reference
           site's homepage pattern. Full founding story stays on the About
           page; this is just enough to orient a first-time visitor. */}

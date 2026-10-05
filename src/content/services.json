@@ -4,8 +4,8 @@
       "id": "sunday-first",
       "day": "Sunday",
       "title": "1st Service",
-      "start_time": "06:00",
-      "end_time": "08:30",
+      "start_time": "07:00",
+      "end_time": "09:00",
       "note": "",
       "image": "/services/sunday-first.jpg",
       "accent": "royal"
@@ -14,9 +14,9 @@
       "id": "sunday-second",
       "day": "Sunday",
       "title": "2nd Service",
-      "start_time": "10:00",
+      "start_time": "10:30",
       "end_time": "12:30",
-      "note": "Main Family Worship",
+      "note": "",
       "image": "/services/sunday-second.jpg",
       "accent": "red"
     },
@@ -31,12 +31,12 @@
       "accent": "gold"
     },
     {
-      "id": "saturday-worship",
-      "day": "Saturday",
-      "title": "Night Worship",
-      "start_time": "16:00",
-      "end_time": "17:30",
-      "note": "Revival & Bible Study",
+      "id": "thursday-bible-study",
+      "day": "Thursday",
+      "title": "Bible Study",
+      "start_time": "18:30",
+      "end_time": "20:00",
+      "note": "",
       "image": "/services/saturday-worship.jpg",
       "accent": "royal"
     }
