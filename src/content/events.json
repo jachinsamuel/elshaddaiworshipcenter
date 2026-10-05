@@ -1,3 +1,13 @@
 {
-  "events": []
+  "enabled": true,
+  "events": [
+    {
+      "title": "Special Prayer & Miracle Service",
+      "image": "/sermons/fasting-prayer-2026.jpg",
+      "date": "Every Friday · 10:00 AM – 1:00 PM",
+      "link": "https://www.youtube.com/@elshaddaiworshipcenter",
+      "link_text": "Watch Live on YouTube",
+      "description": "Join us for a powerful time of worship, apostolic teaching, and intercession."
+    }
+  ]
 }
