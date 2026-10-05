@@ -2,49 +2,65 @@
   "playlists": [
     {
       "year": "2026",
+      "category": "Sunday Worship",
       "title": "Sunday Service 2026",
+      "description": "Full Sunday worship services, weekly apostolic teachings, and live congregational gatherings from 2026.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0riB46qqKQV4F-9mU7quEm8y",
       "thumb": "/sermons/sunday-service-2026.jpg"
     },
     {
       "year": "2026",
+      "category": "Fasting Prayer",
       "title": "Friday Fasting Prayer 2026",
+      "description": "Weekly Friday fasting prayer sessions, intercession, healing ministrations, and biblical teachings.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rhLKvSrWsBhZuNWGZIlQWfB",
       "thumb": "/sermons/fasting-prayer-2026.jpg"
     },
     {
       "year": "2025",
+      "category": "Sunday Worship",
       "title": "Sunday Service 2025",
+      "description": "Complete collection of anointed Sunday morning worship services and messages from 2025.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rgz64ArtKXuHhFm29uY6EnF",
       "thumb": "/sermons/sunday-service-2025.png"
     },
     {
       "year": "2025",
+      "category": "Fasting Prayer",
       "title": "Friday Fasting Prayer 2025",
+      "description": "All Friday fasting and prayer meetings recorded live throughout 2025.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rhFs-BmzLadcXyC0wTGh1dE",
       "thumb": "/sermons/fasting-prayer-2025.jpg"
     },
     {
       "year": "2025",
+      "category": "Special Series",
       "title": "21 Days Prayer - 2025",
+      "description": "Annual 21-day prayer journey of consecration, spiritual revival, and breakthrough teachings.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0ri7kVaHh3_pBuwYXUOERt8E",
       "thumb": "/sermons/21-days-prayer-2025.jpg"
     },
     {
       "year": "2025",
+      "category": "Youth & Kids",
       "title": "VBS 2025",
+      "description": "Vacation Bible School messages, student worship sessions, and creative gospel ministry.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0ripTIiGzzemPAG9fS04zX23",
       "thumb": "/sermons/vbs-2025.jpg"
     },
     {
       "year": "2025",
+      "category": "Conventions",
       "title": "Good Friday Service",
+      "description": "Solemn remembrance of the Cross, Holy Communion, and sacrificial love of Jesus Christ.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rioI9cWGLVN1ZsIqbsBCLFJ",
       "thumb": "/sermons/good-friday.jpg"
     },
     {
       "year": "2025",
+      "category": "Conventions",
       "title": "Resurrection Service",
+      "description": "Celebration of the Risen King, victory over death, and life in the resurrection power.",
       "url": "https://www.youtube.com/playlist?list=PLwzx_RhdN0rhn-9CLbl13AZvSrTEJOqD_",
       "thumb": "/sermons/resurrection-service.jpg"
     }
