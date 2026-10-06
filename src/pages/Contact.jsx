@@ -39,8 +39,30 @@ export default function Contact() {
     try {
       let submitted = false
 
-      // 1. Try sending via serverless /api/contact endpoint
-      try {
+      if (googleSheetUrl) {
+        const formBody = new URLSearchParams()
+        for (const [key, val] of Object.entries(payload)) {
+          formBody.append(key, String(val))
+        }
+
+        // Fire direct request to Google Apps Script Web App
+        const fetchPromise = fetch(googleSheetUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formBody.toString(),
+          mode: 'no-cors',
+        })
+
+        // Google Apps Script processes emails in the cloud which takes 5-8s.
+        // We wait up to 1.2s for the dispatch handshake, then transition to success immediately.
+        await Promise.race([
+          fetchPromise,
+          new Promise((resolve) => setTimeout(resolve, 1200)),
+        ])
+
+        submitted = true
+      } else {
+        // Fallback to /api/contact if direct URL is not configured
         const res = await fetch('/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -49,45 +71,19 @@ export default function Contact() {
 
         if (res.ok) {
           const data = await res.json().catch(() => null)
-          if (data?.success) {
-            submitted = true
-          }
+          if (data?.success) submitted = true
         } else {
           const errData = await res.json().catch(() => null)
-          // If Google Sheets is explicitly not configured on the backend
-          if (errData?.error && !googleSheetUrl) {
-            throw new Error(errData.error)
-          }
-        }
-      } catch (err) {
-        if (!googleSheetUrl) {
-          throw err
+          throw new Error(errData?.error || 'Unable to submit form.')
         }
       }
 
-      // 2. Fallback: Direct submit to Google Apps Script Web App
-      if (!submitted) {
-        if (googleSheetUrl) {
-          const formBody = new URLSearchParams()
-          for (const [key, val] of Object.entries(payload)) {
-            formBody.append(key, String(val))
-          }
-
-          await fetch(googleSheetUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formBody.toString(),
-            mode: 'no-cors',
-          })
-          submitted = true
-        } else {
-          throw new Error(
-            'Google Sheets Web App URL is not configured yet. Please set it in the Admin Panel (Contact Info) or environment variables.'
-          )
-        }
+      if (submitted) {
+        setSent(true)
+        form.reset()
+      } else {
+        throw new Error('Unable to send message. Please try again.')
       }
-
-      setSent(true)
     } catch (err) {
       setErrorMessage(
         err.message || 'Unable to send message right now. Please try again or reach out on WhatsApp.'
