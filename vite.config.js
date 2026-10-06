@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 import { checkLiveStatus } from './api/youtube-live.js'
+import contactHandler from './api/contact.js'
 
 export default defineConfig({
   plugins: [
@@ -23,6 +24,18 @@ export default defineConfig({
               res.statusCode = 500
               res.end(JSON.stringify({ isLive: false, error: err.message }))
             }
+            return
+          }
+
+          if (req.url === '/api/contact') {
+            let body = ''
+            req.on('data', (chunk) => {
+              body += chunk
+            })
+            req.on('end', async () => {
+              req.body = body
+              await contactHandler(req, res)
+            })
             return
           }
 

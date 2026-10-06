@@ -12,30 +12,86 @@ const whatsappMessage = encodeURIComponent("Hi, I'd like to know more about El S
 export default function Contact() {
   const [sent, setSent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErrorMessage('')
+
     const form = e.target
     const formData = new FormData(form)
 
+    const googleSheetUrl =
+      import.meta.env.VITE_GOOGLE_SHEETS_SCRIPT_URL ||
+      contactData.google_sheet_url ||
+      ''
+
+    const payload = {
+      name: formData.get('name') || '',
+      email: formData.get('email') || '',
+      phone: formData.get('phone') || '',
+      address: formData.get('address') || '',
+      message: formData.get('message') || '',
+      timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    }
+
     try {
-      if (contactData.google_sheet_url) {
-        await fetch(contactData.google_sheet_url, {
+      let submitted = false
+
+      // 1. Try sending via serverless /api/contact endpoint
+      try {
+        const res = await fetch('/api/contact', {
           method: 'POST',
-          body: formData,
-          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
         })
-      } else {
-        await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString(),
-        })
+
+        if (res.ok) {
+          const data = await res.json().catch(() => null)
+          if (data?.success) {
+            submitted = true
+          }
+        } else {
+          const errData = await res.json().catch(() => null)
+          // If Google Sheets is explicitly not configured on the backend
+          if (errData?.error && !googleSheetUrl) {
+            throw new Error(errData.error)
+          }
+        }
+      } catch (err) {
+        if (!googleSheetUrl) {
+          throw err
+        }
       }
+
+      // 2. Fallback: Direct submit to Google Apps Script Web App
+      if (!submitted) {
+        if (googleSheetUrl) {
+          const formBody = new URLSearchParams()
+          for (const [key, val] of Object.entries(payload)) {
+            formBody.append(key, String(val))
+          }
+
+          await fetch(googleSheetUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formBody.toString(),
+            mode: 'no-cors',
+          })
+          submitted = true
+        } else {
+          throw new Error(
+            'Google Sheets Web App URL is not configured yet. Please set it in the Admin Panel (Contact Info) or environment variables.'
+          )
+        }
+      }
+
       setSent(true)
-    } catch {
-      setSent(true)
+    } catch (err) {
+      setErrorMessage(
+        err.message || 'Unable to send message right now. Please try again or reach out on WhatsApp.'
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -76,7 +132,17 @@ export default function Contact() {
                 </button>
               </div>
             ) : (
-              <form name="contact" onSubmit={handleSubmit} data-netlify="true" className="grid gap-5">
+              <>
+                {errorMessage && (
+                  <div className="mb-5 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-xs leading-relaxed flex items-start gap-2.5">
+                    <span className="text-amber-600 font-bold text-sm">⚠</span>
+                    <div>
+                      <p className="font-semibold text-amber-950">Notice</p>
+                      <p className="mt-0.5">{errorMessage}</p>
+                    </div>
+                  </div>
+                )}
+                <form name="contact" onSubmit={handleSubmit} className="grid gap-5">
                 <input type="hidden" name="form-name" value="contact" />
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
@@ -111,7 +177,8 @@ export default function Contact() {
                   <Send size={16} className={`transition-transform ${isSubmitting ? 'animate-pulse' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`} />
                 </button>
               </form>
-            )}
+            </>
+          )}
           </motion.div>
 
           {/* Contact card */}
