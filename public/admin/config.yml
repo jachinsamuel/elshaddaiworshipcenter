@@ -217,22 +217,18 @@ collections:
 
   # ---------------------------------------------------------------------
   - name: "events"
-    label: "Upcoming Events (Popup Ad)"
+    label: "Upcoming Events (Popup Poster)"
     files:
       - name: "events"
-        label: "Popup Ad & Flyers"
+        label: "Popup Poster"
         file: "src/content/events.json"
         fields:
-          - { label: "Enable Popup Advertisement", name: "enabled", widget: "boolean", default: true, hint: "Turn ON to display the flyer popup when visitors open the website. Turn OFF to temporarily hide it." }
-          - label: "Upcoming Event Flyers / Ads"
+          - { label: "Enable Popup Poster", name: "enabled", widget: "boolean", default: true, hint: "Turn ON to display the popup poster when visitors open the website. Turn OFF to hide it." }
+          - label: "Posters"
             name: "events"
             widget: "list"
-            summary: "{{fields.title}} ({{fields.image}})"
-            hint: "Upload upcoming event flyers or promotional banners. Visitors will see this as a popup advertisement when opening the website."
+            summary: "{{fields.image}}"
+            hint: "Upload your event poster image here."
             fields:
-              - { label: "Flyer / Poster Image", name: "image", widget: "image", required: true, hint: "Upload the event flyer, advertisement poster, or announcement banner." }
-              - { label: "Event Title (optional)", name: "title", widget: "string", required: false, hint: "e.g. Special Revival Meeting, Youth Conference, Convention" }
-              - { label: "Date / Time (optional)", name: "date", widget: "string", required: false, hint: "e.g. October 15–18, 2026 · 6:30 PM" }
-              - { label: "Action Link URL (optional)", name: "link", widget: "string", required: false, hint: "Website or form link when clicking the flyer or button (e.g. https://...)" }
-              - { label: "Button Label (optional)", name: "link_text", widget: "string", required: false, hint: "e.g. Register Now, Learn More, Join Live" }
-              - { label: "Description / Notes (optional)", name: "description", widget: "text", required: false, hint: "Short description or instructions for attendees." }
+              - { label: "Poster Image", name: "image", widget: "image", required: true, hint: "Upload the flyer or poster graphic." }
+              - { label: "Click Link URL (optional)", name: "link", widget: "string", required: false, hint: "Optional link when someone clicks the poster (e.g. YouTube live or Google Form)." }
