@@ -1,9 +1,4 @@
 {
   "enabled": true,
-  "events": [
-    {
-      "image": "/images/uploads/screenshot-2026-10-06-213544.png",
-      "link": ""
-    }
-  ]
+  "events": []
 }
