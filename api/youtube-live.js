@@ -80,12 +80,13 @@ async function verifyVideoLive(videoId) {
   }
 }
 
-export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANNEL_ID) {
+export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANNEL_ID, isDebug = false) {
   const now = Date.now()
-  if (cache.data && now - cache.timestamp < 45 * 1000) {
+  if (!isDebug && cache.data && now - cache.timestamp < 30 * 1000) {
     return cache.data
   }
 
+  const debug = { candidates: [], steps: [] }
   const candidates = new Set()
 
   // 1. Fetch channel RSS feed (fastest, most reliable, never blocked by datacenter)
@@ -93,7 +94,7 @@ export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANN
     const rssRes = await fetchWithTimeout(
       `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
       {},
-      4000
+      5000
     )
     if (rssRes && rssRes.ok) {
       const xml = await rssRes.text()
@@ -104,15 +105,20 @@ export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANN
         count++
         if (count >= 2) break
       }
+      debug.steps.push({ step: 'rss', ok: true, found: Array.from(candidates) })
+    } else {
+      debug.steps.push({ step: 'rss', ok: false, status: rssRes?.status })
     }
-  } catch {}
+  } catch (err) {
+    debug.steps.push({ step: 'rss', error: err.message })
+  }
 
   // 2. Fetch /live page
   try {
     const liveRes = await fetchWithTimeout(
       `https://www.youtube.com/${handle}/live`,
       { redirect: 'follow' },
-      4000
+      5000
     )
     if (liveRes && liveRes.ok) {
       const html = await liveRes.text()
@@ -125,20 +131,30 @@ export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANN
       if (vMatch && html.includes('"isLiveNow":true')) {
         candidates.add(vMatch[1])
       }
+      debug.steps.push({ step: 'livePage', ok: true, canMatch: canMatch?.[1] })
+    } else {
+      debug.steps.push({ step: 'livePage', ok: false, status: liveRes?.status })
     }
-  } catch {}
+  } catch (err) {
+    debug.steps.push({ step: 'livePage', error: err.message })
+  }
+
+  debug.candidates = Array.from(candidates)
 
   // 3. Verify each candidate video strictly
   for (const candidateId of candidates) {
     const status = await verifyVideoLive(candidateId)
+    debug.steps.push({ step: 'verify', candidateId, status })
     if (status.isLive) {
+      const result = isDebug ? { ...status, debug } : status
       cache = { timestamp: now, data: status }
-      return status
+      return result
     }
   }
 
   const result = { isLive: false, videoId: null, title: null }
-  cache = { timestamp: now, data: result }
+  if (isDebug) result.debug = debug
+  cache = { timestamp: now, data: { isLive: false, videoId: null, title: null } }
   return result
 }
 
@@ -153,8 +169,10 @@ export default async function handler(req, res) {
     return
   }
 
+  const isDebug = req.url && req.url.includes('debug=1')
+
   try {
-    const result = await checkLiveStatus(CHANNEL_HANDLE, CHANNEL_ID)
+    const result = await checkLiveStatus(CHANNEL_HANDLE, CHANNEL_ID, isDebug)
     res.setHeader('Content-Type', 'application/json')
     res.statusCode = 200
     res.end(JSON.stringify(result))
