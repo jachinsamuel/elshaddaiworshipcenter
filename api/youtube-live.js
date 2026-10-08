@@ -6,7 +6,7 @@ let cache = {
   data: null,
 }
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 6000) {
   const controller = new AbortController()
   const id = setTimeout(() => controller.abort(), timeoutMs)
   try {
@@ -15,7 +15,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
       signal: controller.signal,
       headers: {
         'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
         ...(options.headers || {}),
       },
@@ -28,151 +28,73 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
   }
 }
 
-async function verifyVideoLive(videoId) {
-  if (!videoId || !/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return { isLive: false, reason: 'invalid_id' }
-
-  try {
-    const res = await fetchWithTimeout(`https://www.youtube.com/watch?v=${videoId}`, {}, 5000)
-    if (!res) return { isLive: false, reason: 'fetch_timeout' }
-    if (!res.ok) return { isLive: false, reason: `http_${res.status}` }
-
-    const data = await res.text()
-
-    const hasEnd = data.includes('"endTimestamp"')
-    const hasUpcoming = data.includes('"isUpcoming":true')
-
-    if (hasEnd) return { isLive: false, reason: 'has_end_timestamp' }
-    if (hasUpcoming) return { isLive: false, reason: 'is_upcoming' }
-
-    let isLive = false
-    let title = ''
-    let playerDiag = null
-
-    const pMatch = data.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/)
-    if (pMatch) {
-      try {
-        const player = JSON.parse(pMatch[1])
-        const lb = player.microformat?.playerMicroformatRenderer?.liveBroadcastDetails
-        if (lb && lb.isLiveNow === true) {
-          isLive = true
-        } else if (player.videoDetails?.isLive === true && !lb?.endTimestamp) {
-          isLive = true
-        }
-        title = player.videoDetails?.title || ''
-        playerDiag = {
-          vdIsLive: player.videoDetails?.isLive,
-          vdIsLiveContent: player.videoDetails?.isLiveContent,
-          lb: lb,
-          playability: player.playabilityStatus?.status
-        }
-      } catch (e) {
-        playerDiag = { parseError: e.message }
-      }
-    }
-
-    if (!isLive && data.includes('"isLiveNow":true')) {
-      isLive = true
-    }
-
-    if (!title) {
-      const metaTitle =
-        data.match(/<meta property="og:title" content="([^"]+)"/) ||
-        data.match(/<meta name="title" content="([^"]+)"/)
-      if (metaTitle) title = metaTitle[1].replace(' - YouTube', '').trim()
-    }
-
-    return {
-      isLive,
-      videoId: isLive ? videoId : null,
-      title: isLive ? title : null,
-      reason: isLive ? 'ok' : 'not_live_in_player',
-      diag: {
-        len: data.length,
-        hasLiveNow: data.includes('"isLiveNow":true'),
-        hasPlayer: !!pMatch,
-        playerDiag
-      }
-    }
-  } catch (err) {
-    return { isLive: false, reason: err.message }
-  }
-}
-
-export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANNEL_ID, isDebug = false) {
+export async function checkLiveStatus(handle = CHANNEL_HANDLE, channelId = CHANNEL_ID) {
   const now = Date.now()
-  if (!isDebug && cache.data && now - cache.timestamp < 30 * 1000) {
+  if (cache.data && now - cache.timestamp < 30 * 1000) {
     return cache.data
   }
 
-  const debug = { candidates: [], steps: [] }
-  const candidates = new Set()
+  let liveVideoId = null
 
-  // 1. Fetch channel RSS feed (fastest, most reliable, never blocked by datacenter)
+  // 1. Check Channel /streams tab — accurately flags active live streams with THUMBNAIL_OVERLAY_BADGE_STYLE_LIVE
   try {
-    const rssRes = await fetchWithTimeout(
-      `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
+    const res = await fetchWithTimeout(`https://www.youtube.com/${handle}/streams`, {}, 5000)
+    if (res && res.ok) {
+      const html = await res.text()
+      const badgeIdx = html.indexOf('THUMBNAIL_OVERLAY_BADGE_STYLE_LIVE')
+      if (badgeIdx !== -1) {
+        const snippet = html.substring(Math.max(0, badgeIdx - 800), Math.min(html.length, badgeIdx + 800))
+        const targetMatch = snippet.match(/"animationActivationTargetId":"([a-zA-Z0-9_-]{11})"/)
+        const vMatch = snippet.match(/"videoId":"([a-zA-Z0-9_-]{11})"/)
+        liveVideoId = targetMatch?.[1] || vMatch?.[1] || null
+      }
+    }
+  } catch {}
+
+  // 2. Fallback check: /live page if /streams wasn't available
+  if (!liveVideoId) {
+    try {
+      const liveRes = await fetchWithTimeout(`https://www.youtube.com/${handle}/live`, { redirect: 'follow' }, 5000)
+      if (liveRes && liveRes.ok) {
+        const html = await liveRes.text()
+        if (html.includes('THUMBNAIL_OVERLAY_BADGE_STYLE_LIVE') || html.includes('"isLiveNow":true')) {
+          const canMatch = html.match(
+            /<link rel="canonical" href="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})"/
+          )
+          const vMatch = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/)
+          liveVideoId = canMatch?.[1] || vMatch?.[1] || null
+        }
+      }
+    } catch {}
+  }
+
+  if (!liveVideoId) {
+    const result = { isLive: false, videoId: null, title: null }
+    cache = { timestamp: now, data: result }
+    return result
+  }
+
+  // 3. Fetch title using YouTube oEmbed (official public API, never blocked)
+  let title = 'Live Worship Broadcast'
+  try {
+    const oembedRes = await fetchWithTimeout(
+      `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${liveVideoId}&format=json`,
       {},
-      5000
+      3000
     )
-    if (rssRes && rssRes.ok) {
-      const xml = await rssRes.text()
-      const matches = xml.matchAll(/<yt:videoId>([a-zA-Z0-9_-]{11})<\/yt:videoId>/g)
-      let count = 0
-      for (const m of matches) {
-        candidates.add(m[1])
-        count++
-        if (count >= 2) break
-      }
-      debug.steps.push({ step: 'rss', ok: true, found: Array.from(candidates) })
-    } else {
-      debug.steps.push({ step: 'rss', ok: false, status: rssRes?.status })
+    if (oembedRes && oembedRes.ok) {
+      const oembedData = await oembedRes.json()
+      if (oembedData.title) title = oembedData.title
     }
-  } catch (err) {
-    debug.steps.push({ step: 'rss', error: err.message })
+  } catch {}
+
+  const result = {
+    isLive: true,
+    videoId: liveVideoId,
+    title,
   }
 
-  // 2. Fetch /live page
-  try {
-    const liveRes = await fetchWithTimeout(
-      `https://www.youtube.com/${handle}/live`,
-      { redirect: 'follow' },
-      5000
-    )
-    if (liveRes && liveRes.ok) {
-      const html = await liveRes.text()
-      const canMatch = html.match(
-        /<link rel="canonical" href="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})"/
-      )
-      if (canMatch) candidates.add(canMatch[1])
-
-      const vMatch = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/)
-      if (vMatch && html.includes('"isLiveNow":true')) {
-        candidates.add(vMatch[1])
-      }
-      debug.steps.push({ step: 'livePage', ok: true, canMatch: canMatch?.[1] })
-    } else {
-      debug.steps.push({ step: 'livePage', ok: false, status: liveRes?.status })
-    }
-  } catch (err) {
-    debug.steps.push({ step: 'livePage', error: err.message })
-  }
-
-  debug.candidates = Array.from(candidates)
-
-  // 3. Verify each candidate video strictly
-  for (const candidateId of candidates) {
-    const status = await verifyVideoLive(candidateId)
-    debug.steps.push({ step: 'verify', candidateId, status })
-    if (status.isLive) {
-      const result = isDebug ? { ...status, debug } : status
-      cache = { timestamp: now, data: status }
-      return result
-    }
-  }
-
-  const result = { isLive: false, videoId: null, title: null }
-  if (isDebug) result.debug = debug
-  cache = { timestamp: now, data: { isLive: false, videoId: null, title: null } }
+  cache = { timestamp: now, data: result }
   return result
 }
 
@@ -187,10 +109,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const isDebug = req.url && req.url.includes('debug=1')
-
   try {
-    const result = await checkLiveStatus(CHANNEL_HANDLE, CHANNEL_ID, isDebug)
+    const result = await checkLiveStatus(CHANNEL_HANDLE, CHANNEL_ID)
     res.setHeader('Content-Type', 'application/json')
     res.statusCode = 200
     res.end(JSON.stringify(result))
