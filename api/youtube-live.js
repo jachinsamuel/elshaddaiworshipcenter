@@ -46,6 +46,7 @@ async function verifyVideoLive(videoId) {
 
     let isLive = false
     let title = ''
+    let playerDiag = null
 
     const pMatch = data.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/)
     if (pMatch) {
@@ -58,7 +59,15 @@ async function verifyVideoLive(videoId) {
           isLive = true
         }
         title = player.videoDetails?.title || ''
-      } catch {}
+        playerDiag = {
+          vdIsLive: player.videoDetails?.isLive,
+          vdIsLiveContent: player.videoDetails?.isLiveContent,
+          lb: lb,
+          playability: player.playabilityStatus?.status
+        }
+      } catch (e) {
+        playerDiag = { parseError: e.message }
+      }
     }
 
     if (!isLive && data.includes('"isLiveNow":true')) {
@@ -77,7 +86,12 @@ async function verifyVideoLive(videoId) {
       videoId: isLive ? videoId : null,
       title: isLive ? title : null,
       reason: isLive ? 'ok' : 'not_live_in_player',
-      diag: { len: data.length, hasLiveNow: data.includes('"isLiveNow":true'), hasPlayer: !!pMatch }
+      diag: {
+        len: data.length,
+        hasLiveNow: data.includes('"isLiveNow":true'),
+        hasPlayer: !!pMatch,
+        playerDiag
+      }
     }
   } catch (err) {
     return { isLive: false, reason: err.message }
