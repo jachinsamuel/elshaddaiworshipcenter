@@ -29,18 +29,20 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
 }
 
 async function verifyVideoLive(videoId) {
-  if (!videoId || !/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return { isLive: false }
+  if (!videoId || !/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return { isLive: false, reason: 'invalid_id' }
 
   try {
     const res = await fetchWithTimeout(`https://www.youtube.com/watch?v=${videoId}`, {}, 5000)
-    if (!res || !res.ok) return { isLive: false }
+    if (!res) return { isLive: false, reason: 'fetch_timeout' }
+    if (!res.ok) return { isLive: false, reason: `http_${res.status}` }
 
     const data = await res.text()
 
-    // If stream has ended or is upcoming, it is NOT live right now
-    if (data.includes('"endTimestamp"') || data.includes('"isUpcoming":true')) {
-      return { isLive: false }
-    }
+    const hasEnd = data.includes('"endTimestamp"')
+    const hasUpcoming = data.includes('"isUpcoming":true')
+
+    if (hasEnd) return { isLive: false, reason: 'has_end_timestamp' }
+    if (hasUpcoming) return { isLive: false, reason: 'is_upcoming' }
 
     let isLive = false
     let title = ''
@@ -74,9 +76,11 @@ async function verifyVideoLive(videoId) {
       isLive,
       videoId: isLive ? videoId : null,
       title: isLive ? title : null,
+      reason: isLive ? 'ok' : 'not_live_in_player',
+      diag: { len: data.length, hasLiveNow: data.includes('"isLiveNow":true'), hasPlayer: !!pMatch }
     }
-  } catch {
-    return { isLive: false }
+  } catch (err) {
+    return { isLive: false, reason: err.message }
   }
 }
 
