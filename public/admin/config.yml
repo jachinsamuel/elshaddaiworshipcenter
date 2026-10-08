@@ -113,7 +113,7 @@ collections:
           - { label: "Huge Opening Statement", name: "opening_statement", widget: "text", hint: "The big sentence at the top of the About page." }
           - { label: "Homepage 'Who We Are' Intro", name: "home_intro", widget: "text" }
           - { label: "Homepage Founding Summary (one line)", name: "founding_summary", widget: "string" }
-          - { label: "Sanctuary Photo", name: "sanctuary_image", widget: "image" }
+          - { label: "Church Interior Photo", name: "sanctuary_image", widget: "image" }
           - { label: "Founded Year Text", name: "founded_year_text", widget: "string" }
           - { label: "Location Text", name: "location_text", widget: "string" }
           - { label: "Founding Story — Paragraph 1", name: "story_paragraph_1", widget: "text" }

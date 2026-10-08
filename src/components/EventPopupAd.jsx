@@ -105,6 +105,9 @@ export default function EventPopupAd() {
                   <img
                     src={currentEvent.image}
                     alt={currentEvent.title || 'Event Poster'}
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
                     className="w-auto h-auto max-w-[90vw] sm:max-w-lg md:max-w-xl max-h-[85vh] object-contain rounded-2xl block transition-transform duration-300 group-hover:scale-[1.01]"
                   />
                 </a>
@@ -112,6 +115,9 @@ export default function EventPopupAd() {
                 <img
                   src={currentEvent.image}
                   alt={currentEvent.title || 'Event Poster'}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                   className="w-auto h-auto max-w-[90vw] sm:max-w-lg md:max-w-xl max-h-[85vh] object-contain rounded-2xl block"
                 />
               )}

@@ -45,7 +45,7 @@ export default function About() {
           <TiltCard className="relative group rounded-2xl overflow-hidden shadow-lg w-full h-full bg-stone-100">
             <FallbackImage
               src={aboutContent.sanctuary_image}
-              alt="El Shaddai Worship Center sanctuary interior"
+              alt="El Shaddai Worship Center interior"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           </TiltCard>

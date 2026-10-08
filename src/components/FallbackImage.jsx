@@ -38,6 +38,7 @@ export default function FallbackImage({ src, alt = '', className = '', ...props 
         src={src}
         alt={alt}
         loading="lazy"
+        decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => setErrored(true)}
         className={`${className} transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}

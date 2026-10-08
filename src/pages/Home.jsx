@@ -57,9 +57,8 @@ export default function Home() {
     }
   }, [])
 
-  const isChannelLive = youtubeLive?.isLive === true
+  const isChannelLive = youtubeLive?.isLive === true && !!youtubeLive.videoId
   const isManuallyLive = !!settingsData.live_stream_url
-  const isScheduledLive = !!liveService && youtubeLive?.isLive !== false
 
   const activeLive = isChannelLive
     ? {
@@ -73,15 +72,7 @@ export default function Home() {
           embedUrl: getVideoEmbedUrl(settingsData.live_stream_url),
           watchUrl: settingsData.live_stream_url,
         }
-      : isScheduledLive
-        ? {
-            title: liveService.title,
-            embedUrl: YOUTUBE_CHANNEL_ID
-              ? `https://www.youtube.com/embed/live_stream?channel=${YOUTUBE_CHANNEL_ID}&autoplay=0`
-              : null,
-            watchUrl: settingsData.youtube_watch_url || 'https://www.youtube.com/@elshaddaiworshipcenter/live',
-          }
-        : null
+      : null
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
@@ -222,7 +213,7 @@ export default function Home() {
                 <PlayCircle size={17} /> Watch Live on YouTube <ExternalLink size={14} />
               </a>
               <span className="text-xs text-stone-500">
-                Streaming live from Nagercoil Sanctuary
+                Streaming live from Nagercoil
               </span>
             </div>
           </div>
@@ -277,7 +268,7 @@ export default function Home() {
             <TiltCard className="relative group rounded-2xl overflow-hidden shadow-lg aspect-[4/5] max-h-[480px] bg-stone-100 w-full">
               <FallbackImage
                 src={aboutContent.sanctuary_image}
-                alt="El Shaddai sanctuary"
+                alt="El Shaddai Worship Center"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
             </TiltCard>
@@ -334,14 +325,20 @@ export default function Home() {
         return (
           <section
             id="schedule"
-            className="relative py-20 sm:py-28 overflow-hidden bg-cover bg-center text-white bg-stone-950"
-            style={{
-              backgroundImage: scheduleBg
-                ? `linear-gradient(to bottom, rgba(10,10,12,0.85), rgba(10,10,12,0.85)), url(${scheduleBg})`
-                : undefined,
-            }}
+            className="relative py-20 sm:py-28 overflow-hidden text-white bg-stone-950"
           >
-            <div className="grain absolute inset-0 opacity-[0.03]" />
+            {scheduleBg && (
+              <img
+                src={scheduleBg}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover -z-10 opacity-30 select-none pointer-events-none"
+              />
+            )}
+            <div className="absolute inset-0 bg-stone-950/80 -z-10 pointer-events-none" />
+            <div className="grain absolute inset-0 opacity-[0.03] pointer-events-none" />
             
             <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
               <motion.div
